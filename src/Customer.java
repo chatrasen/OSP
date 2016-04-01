@@ -9,4 +9,7 @@ public class Customer extends User{
 	public void setCity(String city) {
 		this.city = city;
 	}
+	
+	public Customer() {
+	}
 }

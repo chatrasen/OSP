@@ -29,5 +29,8 @@ public class User {
 	public void setIM_ID(String iM_ID) {
 		IM_ID = iM_ID;
 	}
-
+	public User()
+	{
+		
+	}
 }
