@@ -55,7 +55,6 @@ public class Main extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new CardLayout(0, 0));	
 		
-		
 		LoginPanel panelLogin = new LoginPanel();
 		contentPane.add(panelLogin, "Login panel");
 		
@@ -74,6 +73,25 @@ public class Main extends JFrame {
 		CustomerPanel panelCustomer = new CustomerPanel();
 		contentPane.add(panelCustomer, "Customer Register Panel");
 		
+		CustomerLoginPanel panelCustomerLogin = new CustomerLoginPanel();
+		contentPane.add(panelCustomerLogin, "Login page for the customer");
+		panelLogin.btnCustomer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				panelLogin.setVisible(false);
+				panelCustomerLogin.setVisible(true);
+			}
+		});
+		
+		
+		ManagerLoginPanel panelManagerLogin = new ManagerLoginPanel();
+		contentPane.add(panelManagerLogin, "Login page for the Manager");	
+		panelLogin.btnManager.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				panelLogin.setVisible(false);
+				panelManagerLogin.setVisible(true);
+			}
+		});
+		
 		panelRegister.btnCustomer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panelRegister.setVisible(false);
@@ -91,13 +109,13 @@ public class Main extends JFrame {
 		
 		panelCustomer.btnCreateMyAccount.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {	
+				panelCustomer.setVisible(false);
 				panelCustomer.customer.setCity(panelCustomer.textCity.getText());
 				panelCustomer.customer.setEmail(panelCustomer.textEmail.getText());
 				panelCustomer.customer.setIM_ID(panelCustomer.textIM_ID.getText());
 				panelCustomer.customer.setName(panelCustomer.textName.getText());
 				panelCustomer.customer.setTelephone(panelCustomer.textTelephone.getText());
 				
-				panelCustomer.setVisible(false);
 				
 				Connection conn = sqliteConnection.dbConnector();
 				Statement stmt = null;
@@ -128,7 +146,7 @@ public class Main extends JFrame {
 				}
 				
 				panelLogin.setVisible(true);
-				JOptionPane.showMessageDialog(null, "Account Created. Please Login to Continue.");
+				JOptionPane.showMessageDialog(null, "Account Created. Your password is "+password + ". Please Login to Continue.");
 			}
 		});
 		/**/
@@ -194,7 +212,9 @@ public class Main extends JFrame {
 				}
 				
 				panelLogin.setVisible(true);
-				JOptionPane.showMessageDialog(null, "Account Created. Please Login to Continue.");
+				JOptionPane.showMessageDialog(null, "Account Created. Your password is "+password + ". Please Login to Continue.");
+				SendMail.send("vaiagarwal96@gmail.com","chatrasen@gmail.com");
+
 			}
 		});
 	}

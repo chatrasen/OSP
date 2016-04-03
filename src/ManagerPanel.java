@@ -100,7 +100,12 @@ public class ManagerPanel extends JPanel {
 		textBiometricID.setColumns(10);
 		
 		btnCreateNewAccount = new JButton("Create New Account");
-		btnCreateNewAccount.setBounds(54, 248, 143, 23);
+		btnCreateNewAccount.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnCreateNewAccount.setBounds(54, 248, 173, 23);
 		add(btnCreateNewAccount);
 		
 		btnIWillTry = new JButton("I will create it later");
