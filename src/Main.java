@@ -3,21 +3,32 @@
 import java.awt.BorderLayout;
 import java.security.SecureRandom;
 import java.math.BigInteger;
+import java.util.Iterator;
 
 import java.awt.EventQueue;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Vector;
 
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
 import java.awt.CardLayout;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 
 
@@ -329,6 +340,7 @@ public class Main extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				panelCustomerDashboard.setVisible(false);
 				panelBuyerDashboard.setVisible(true);
+				setBounds(100, 100, 600, 400);
 			}
 		});
 		
@@ -387,6 +399,148 @@ public class Main extends JFrame {
 			}
 		});
 		
+		/* Buyer Dashboard*/ 
+		panelBuyerDashboard.btnDisplayCategories.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				Set<String> categories = new HashSet<String>();
+			    try {
+			    	Connection conn = null;
+					conn = sqliteConnection.dbConnector();
+				    Statement stmt = null;
+				    
+					stmt = (Statement) conn.createStatement();
+					ResultSet rs = stmt.executeQuery( "SELECT * FROM item_data" );
+					
+					while(rs.next())
+					{
+						categories.add(rs.getString("Category"));
+					}					
+					conn.close();
+				} catch (SQLException e1) {
+					e1.printStackTrace();				
+				}
+			    
+			    
+				Iterator<String> it = categories.iterator();
+				panelBuyerDashboard.model.removeAllElements();
+				while(it.hasNext())
+				{
+					panelBuyerDashboard.model.addElement(it.next());
+				}
+			}
+		});
+		
+		Vector<ImagesAndText> imgInfo = new Vector<ImagesAndText>();
+		
+		panelBuyerDashboard.listCategories.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e)
+			{		
+				String selectedCategory = panelBuyerDashboard.listCategories.getSelectedValue().toString();
+				if(e.getClickCount()==2)
+				{
+					try{
+						Connection conn = null;
+						conn = sqliteConnection.dbConnector();
+					    Statement stmt = null;
+					    
+						stmt = (Statement) conn.createStatement();
+						ResultSet rs = stmt.executeQuery( "SELECT * FROM item_data" );
+						panelBuyerDashboard.modelDisplay.clear();
+						imgInfo.clear();
+						
+						while(rs.next())
+						{
+							boolean inserted = false;
+
+							ImageIcon imageIcon = null;				
+							Image image = null; 
+							Image newimg = null;  
+							if(rs.getString("Category").compareTo(selectedCategory)==0)
+							{	
+								imageIcon = new ImageIcon(rs.getString("Image_File"));				
+								image = imageIcon.getImage(); 
+								newimg = image.getScaledInstance(120, 120,  java.awt.Image.SCALE_SMOOTH);  
+								imageIcon = new ImageIcon(newimg);  
+								inserted = true;
+								panelBuyerDashboard.modelDisplay.addElement(new ImagesAndText("Price: " + rs.getString("Price"), imageIcon, rs.getString("Image_File"), inserted));
+							}
+							imgInfo.addElement(new ImagesAndText("Price: " + rs.getString("Price"), imageIcon, rs.getString("Image_File"), inserted));
+							
+						}					
+						conn.close();
+						
+						panelBuyerDashboard.listDisplay.setCellRenderer(new Renderer());
+						
+					}
+					catch(SQLException e1)
+					{
+						e1.printStackTrace();
+					}
+					
+				}
+			}			
+		});
+		ImageSpecs panelImageSpecs = new ImageSpecs();
+		contentPane.add(panelImageSpecs, "Image Specification Panel");
+		
+		panelBuyerDashboard.listDisplay.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				//int clickIndex = panelBuyerDashboard.listDisplay.getSelectedIndex();
+				if(e.getClickCount()==2)
+				{
+					panelBuyerDashboard.setVisible(false);
+					//String query = "select * from item_data";
+					conn = sqliteConnection.dbConnector();
+					
+					
+					try {
+						conn = sqliteConnection.dbConnector();
+					    Statement stmt = null;
+					    
+						stmt = (Statement) conn.createStatement();
+						ResultSet rs = stmt.executeQuery( "SELECT * FROM item_data" );						
+
+						panelImageSpecs.textArea.setText(null);
+						int count = 0;
+						while(rs.next())
+						{				
+							if(imgInfo.elementAt(count).isInserted)
+							{
+								System.out.println(count);
+								panelImageSpecs.textArea.append("Price: " + rs.getString("Price") + "\n");
+								panelImageSpecs.textArea.append("Age: " + rs.getString("Age") + "\n");
+								panelImageSpecs.textArea.append("City: " + rs.getString("City") + "\n");
+								panelImageSpecs.textArea.append("Company Name: " + rs.getString("Comapny_Name")+ "\n");
+								panelImageSpecs.textArea.append("Weight: " + rs.getString("Weight") + "\n");
+								panelImageSpecs.textArea.append("Details: " + rs.getString("Details")+ "\n");
+								panelImageSpecs.textArea.append("Category: " + rs.getString("Category") + "\n");
+								
+								ImageIcon imageIcon = new ImageIcon(rs.getString("Image_File"));				
+								Image image = imageIcon.getImage(); 
+								Image newimg = image.getScaledInstance(172, 182, java.awt.Image.SCALE_SMOOTH);  
+								imageIcon = new ImageIcon(newimg); 
+								panelImageSpecs.lblImage.setIcon(imageIcon);
+							}
+							count++;
+						}
+						
+						conn.close();
+					} catch (SQLException e1) {					
+						e1.printStackTrace();
+					}
+					
+					panelImageSpecs.setVisible(true);
+				}
+			}
+		});
+		panelImageSpecs.btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				panelImageSpecs.setVisible(false);
+				panelBuyerDashboard.setVisible(true);
+			}
+		});
 	}
 }
 	
