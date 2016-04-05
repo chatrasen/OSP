@@ -84,7 +84,7 @@ public class BuyerDashboardPanel extends JPanel {
 		scrollPane_2.setBounds(424, 76, 99, 122);
 		add(scrollPane_2);
 		
-		listCart = new JList<Object>();
+		listCart = new JList<Object>(modelCart);
 		scrollPane_2.setViewportView(listCart);
 		
 		lblCart = new JLabel("Cart");
@@ -95,7 +95,7 @@ public class BuyerDashboardPanel extends JPanel {
 		scrollPane_3.setBounds(434, 235, 105, 115);
 		add(scrollPane_3);
 		
-		listMessages = new JList<Object>();
+		listMessages = new JList<Object>(modelMessages);
 		scrollPane_3.setRowHeaderView(listMessages);
 		
 		lblMessages = new JLabel("Messages");
