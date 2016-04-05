@@ -1,11 +1,13 @@
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 
 public class ItemPanel extends JPanel {
@@ -22,6 +24,7 @@ public class ItemPanel extends JPanel {
 	public JButton btnUploadImage;
 	
 	public Item item = new Item();
+	private JLabel label;
 
 	/**
 	 * Create the panel.
@@ -106,16 +109,26 @@ public class ItemPanel extends JPanel {
 		          File selectedFile = fileChooser.getSelectedFile();
 		          
 		          textImage.setText(selectedFile.getAbsolutePath());
+		          ImageIcon imageIcon = new ImageIcon(selectedFile.getAbsolutePath());				
+		          Image image = imageIcon.getImage(); 
+		          Image newimg = image.getScaledInstance(123, 88, java.awt.Image.SCALE_SMOOTH);  
+		          imageIcon = new ImageIcon(newimg); 
+		          label.setIcon(imageIcon);
 		        }
 			}
 		});
-		btnUploadImage.setBounds(329, 84, 111, 23);
+		btnUploadImage.setBounds(329, 107, 111, 23);
 		add(btnUploadImage);
 		
 		textImage = new JTextField();
-		textImage.setBounds(339, 113, 86, 20);
+		textImage.setBounds(342, 135, 86, 20);
 		add(textImage);
 		textImage.setColumns(10);
+		textImage.setEditable(false);
+		
+		label = new JLabel("");
+		label.setBounds(317, 11, 123, 88);
+		add(label);
 		
 	}
 }

@@ -12,6 +12,7 @@ public class ImageSpecs extends JPanel {
 	public JTextArea textArea;
 	public JLabel lblImage;
 	public JButton btnBack;
+	private JButton btnAddToCart;
 	/**
 	 * Create the panel.
 	 */
@@ -40,6 +41,10 @@ public class ImageSpecs extends JPanel {
 		
 		btnBack.setBounds(57, 259, 89, 23);
 		add(btnBack);
+		
+		btnAddToCart = new JButton("Add to Cart");
+		btnAddToCart.setBounds(258, 306, 89, 23);
+		add(btnAddToCart);
 		
 	}	
 }

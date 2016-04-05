@@ -14,16 +14,27 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class BuyerDashboardPanel extends JPanel {
-	private JTextField textSearch;
+	public JTextField textSearch;
 	public JButton btnDisplayCategories;
 	public JList<String> listCategories;
 	
 	public DefaultListModel<String> model = new DefaultListModel<String>();
 	public JList<Object> listDisplay;
-	private JScrollPane scrollPane;
-	private JScrollPane scrollPane_1;
+	public JScrollPane scrollPane;
+	public JScrollPane scrollPane_1;
 	
 	public DefaultListModel<Object> modelDisplay = new DefaultListModel<Object>();
+	public DefaultListModel<Object> modelCart = new DefaultListModel<Object>();
+	public DefaultListModel<Object> modelMessages = new DefaultListModel<Object>();
+
+	public JButton btnLogout;
+	public JScrollPane scrollPane_2;
+	public JList<Object> listCart;
+	public JLabel lblCart;
+	public JScrollPane scrollPane_3;
+	public JList<Object> listMessages;
+	public JLabel lblMessages;
+	public JButton btnPlaceOrder;
 
 	/**
 	 * Create the panel.
@@ -63,6 +74,37 @@ public class BuyerDashboardPanel extends JPanel {
 		listDisplay = new JList<Object>(modelDisplay);
 		
 		scrollPane_1.setViewportView(listDisplay);
+		
+		btnLogout = new JButton("Logout");
+		
+		btnLogout.setBounds(434, 11, 89, 23);
+		add(btnLogout);
+		
+		scrollPane_2 = new JScrollPane();
+		scrollPane_2.setBounds(424, 76, 99, 122);
+		add(scrollPane_2);
+		
+		listCart = new JList<Object>();
+		scrollPane_2.setViewportView(listCart);
+		
+		lblCart = new JLabel("Cart");
+		lblCart.setBounds(454, 51, 46, 14);
+		add(lblCart);
+		
+		scrollPane_3 = new JScrollPane();
+		scrollPane_3.setBounds(434, 235, 105, 115);
+		add(scrollPane_3);
+		
+		listMessages = new JList<Object>();
+		scrollPane_3.setRowHeaderView(listMessages);
+		
+		lblMessages = new JLabel("Messages");
+		lblMessages.setBounds(454, 210, 85, 14);
+		add(lblMessages);
+		
+		btnPlaceOrder = new JButton("Place Order");
+		btnPlaceOrder.setBounds(211, 310, 147, 23);
+		add(btnPlaceOrder);
 		
 		
 		

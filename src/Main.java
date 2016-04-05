@@ -64,7 +64,7 @@ public class Main extends JFrame {
 	private SecureRandom random = new SecureRandom();
 
 	public String generatePassword() {
-	   return new BigInteger(40, random).toString(32);
+	   return new BigInteger(60, random).toString(32);
 	}
 	
 	public Main() {
@@ -148,6 +148,7 @@ public class Main extends JFrame {
 
 				String username = panelCustomer.customer.getEmail();
 				String password = generatePassword();
+				String customerId = generatePassword();
 				System.out.println(username);
 				String update = "INSERT INTO customer_data VALUES(" 								
 								+ "'" + panelCustomer.customer.getName()+"',"
@@ -156,7 +157,8 @@ public class Main extends JFrame {
 								+ "'" + panelCustomer.customer.getTelephone() + "',"
 								+ "'" + panelCustomer.customer.getIM_ID() + "',"
 								+ "'" + panelCustomer.customer.getCity() + "',"
-								+ "'" + panelCustomer.customer.getEmail()
+								+ "'" + panelCustomer.customer.getEmail() + "',"
+								+ "'" + customerId
 								+ "')";
 				try {
 					stmt.executeUpdate(update);
@@ -211,6 +213,8 @@ public class Main extends JFrame {
 
 				String username = panelManager.manager.getEmail();
 				String password = generatePassword();
+				String managerId = generatePassword();
+				
 				System.out.println(username);
 				String update = "INSERT INTO manager_data VALUES(" 								
 								+ "'" + panelManager.manager.getName()+"',"
@@ -222,7 +226,8 @@ public class Main extends JFrame {
 								+ "'" + panelManager.manager.getEmail() + "',"
 								+ "'" + panelManager.manager.getDateOfBirth() + "',"
 								+ "'" + panelManager.manager.getAddress() + "',"
-								+ "'" + panelManager.manager.getBiometricID()
+								+ "'" + panelManager.manager.getBiometricID() + "',"
+								+ "'" + managerId
 								+ "')";
 				try {
 					stmt.executeUpdate(update);
@@ -264,7 +269,7 @@ public class Main extends JFrame {
 					while(rs.next())
 					{
 						count++;
-						currentCustomerId = rs.getString("IM_ID");
+						currentCustomerId = rs.getString("Customer_id");
 					}
 					if(count == 1)
 					{
@@ -305,7 +310,7 @@ public class Main extends JFrame {
 					while(rs.next())
 					{
 						count++;
-						currentManagerId = rs.getString("IM_ID");
+						currentManagerId = rs.getString("ManagerId");
 					}
 					if(count == 1)
 					{
@@ -339,6 +344,31 @@ public class Main extends JFrame {
 		panelCustomerDashboard.btnBuyer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panelCustomerDashboard.setVisible(false);
+				
+				try{
+					Connection conn = null;
+					conn = sqliteConnection.dbConnector();
+				    Statement stmt = null;
+				    
+					stmt = (Statement) conn.createStatement();
+					ResultSet rs = stmt.executeQuery( "SELECT Cart FROM customer_data where Customer_id = '" + currentCustomerId + "'");
+					panelBuyerDashboard.modelCart.clear();
+					
+					String cart = null;
+					while(rs.next())
+					{
+						cart = rs.getString("Cart");
+					}					
+					conn.close();
+					
+					panelBuyerDashboard.listDisplay.setCellRenderer(new Renderer());
+					
+				}
+				catch(SQLException e1)
+				{
+					e1.printStackTrace();
+				}
+				
 				panelBuyerDashboard.setVisible(true);
 				setBounds(100, 100, 600, 400);
 			}
@@ -375,6 +405,7 @@ public class Main extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				String itemId  = generatePassword();
 				
 				String update = "INSERT INTO item_data VALUES(" 								
 								+ "'" + panelItem.item.getPrice()+"',"								
@@ -385,6 +416,7 @@ public class Main extends JFrame {
 								+ "'" + panelItem.item.getDetails() + "',"
 								+ "'" + panelItem.item.getImageFile() + "',"
 								+ "'" + panelItem.item.getCategory().getName() + "',"
+								+ "'" + itemId + "',"
 								+ "'" + currentCustomerId + "',"
 								+ "'" + " "
 								+ "')";
@@ -463,9 +495,9 @@ public class Main extends JFrame {
 								newimg = image.getScaledInstance(120, 120,  java.awt.Image.SCALE_SMOOTH);  
 								imageIcon = new ImageIcon(newimg);  
 								inserted = true;
-								panelBuyerDashboard.modelDisplay.addElement(new ImagesAndText("Price: " + rs.getString("Price"), imageIcon, rs.getString("Image_File"), inserted));
+								panelBuyerDashboard.modelDisplay.addElement(new ImagesAndText("Price: " + rs.getString("Price"), imageIcon, rs.getString("Item_Id"), inserted));
 							}
-							imgInfo.addElement(new ImagesAndText("Price: " + rs.getString("Price"), imageIcon, rs.getString("Image_File"), inserted));
+							imgInfo.addElement(new ImagesAndText("Price: " + rs.getString("Price"), imageIcon, rs.getString("Item_Id"), inserted));
 							
 						}					
 						conn.close();
@@ -503,7 +535,8 @@ public class Main extends JFrame {
 						ResultSet rs = stmt.executeQuery( "SELECT * FROM item_data" );						
 
 						panelImageSpecs.textArea.setText(null);
-						int count = 0;
+						int count = 0;						
+						
 						while(rs.next())
 						{				
 							if(imgInfo.elementAt(count).isInserted)
@@ -512,7 +545,7 @@ public class Main extends JFrame {
 								panelImageSpecs.textArea.append("Price: " + rs.getString("Price") + "\n");
 								panelImageSpecs.textArea.append("Age: " + rs.getString("Age") + "\n");
 								panelImageSpecs.textArea.append("City: " + rs.getString("City") + "\n");
-								panelImageSpecs.textArea.append("Company Name: " + rs.getString("Comapny_Name")+ "\n");
+								panelImageSpecs.textArea.append("Company Name: " + rs.getString("Company_Name")+ "\n");
 								panelImageSpecs.textArea.append("Weight: " + rs.getString("Weight") + "\n");
 								panelImageSpecs.textArea.append("Details: " + rs.getString("Details")+ "\n");
 								panelImageSpecs.textArea.append("Category: " + rs.getString("Category") + "\n");
@@ -539,6 +572,13 @@ public class Main extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				panelImageSpecs.setVisible(false);
 				panelBuyerDashboard.setVisible(true);
+			}
+		});
+		
+		panelBuyerDashboard.btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelBuyerDashboard.setVisible(false);
+				panelLogin.setVisible(true);
 			}
 		});
 	}

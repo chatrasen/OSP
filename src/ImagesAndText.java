@@ -3,20 +3,20 @@ import javax.swing.Icon;
 public class ImagesAndText {
 	private String name;
 	private Icon img;
-	private String imgFile;
+	private String itemId;
 	public boolean isInserted;
 	
-	public String getImgFile() {
-		return imgFile;
+	public String getItemId() {
+		return itemId;
 	}
-	public void setImgFile(String imgFile) {
-		this.imgFile = imgFile;
+	public void setItemId(String itemId) {
+		this.itemId = itemId;
 	}
-	public ImagesAndText(String text, Icon icon, String imgFile, boolean isInserted)
+	public ImagesAndText(String text, Icon icon, String itemId, boolean isInserted)
 	{
 		this.name = text;
 		this.img = icon;
-		this.imgFile = imgFile;
+		this.itemId = itemId;
 		this.isInserted = isInserted;
 	}
 	public String getName() {
