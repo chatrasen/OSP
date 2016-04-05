@@ -1,3 +1,5 @@
+
+
 import java.awt.BorderLayout;
 import java.security.SecureRandom;
 import java.math.BigInteger;
@@ -6,6 +8,8 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -16,10 +20,16 @@ import java.awt.CardLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+
 public class Main extends JFrame {
 
 	private JPanel contentPane;
-
+	
+	Connection conn = null;
+	
+	public String currentCustomerId;
+	public String currentManagerId;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -81,7 +91,6 @@ public class Main extends JFrame {
 				panelCustomerLogin.setVisible(true);
 			}
 		});
-		
 		
 		ManagerLoginPanel panelManagerLogin = new ManagerLoginPanel();
 		contentPane.add(panelManagerLogin, "Login page for the Manager");	
@@ -213,11 +222,172 @@ public class Main extends JFrame {
 				
 				panelLogin.setVisible(true);
 				JOptionPane.showMessageDialog(null, "Account Created. Your password is "+password + ". Please Login to Continue.");
-				SendMail.send("vaiagarwal96@gmail.com","chatrasen@gmail.com");
-
+				//SendMail.send("vaiagarwal96@gmail.com","chatrasen@gmail.com");
 			}
 		});
+		CustomerDashboardPanel panelCustomerDashboard = new CustomerDashboardPanel();
+		contentPane.add(panelCustomerDashboard, "Customer Dashboard Panel");
+		
+		ManagerDashboardPanel panelManagerDashboard = new ManagerDashboardPanel();
+		contentPane.add(panelManagerDashboard, "Manager Dashboard Panel");
+		
+		SellerDashboardPanel panelSellerDashboard = new SellerDashboardPanel();
+		contentPane.add(panelSellerDashboard, "Seller Dashboard Panel");
+		
+		BuyerDashboardPanel panelBuyerDashboard = new BuyerDashboardPanel();
+		contentPane.add(panelBuyerDashboard, "Buyer Dashboard Panel");
+		
+		panelCustomerLogin.btnLogIn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String query = "select * from customer_data where Username=? and Password=?";
+				conn = sqliteConnection.dbConnector();
+
+				try {
+					PreparedStatement pst = conn.prepareStatement(query);
+					pst.setString(1,panelCustomerLogin.userNameField.getText());
+					pst.setString(2,panelCustomerLogin.passwordField.getText());
+					
+					ResultSet rs = pst.executeQuery();
+					
+					int count = 0;
+					while(rs.next())
+					{
+						count++;
+						currentCustomerId = rs.getString("IM_ID");
+					}
+					if(count == 1)
+					{
+						//JOptionPane.showMessageDialog(null, "Username and password is correct");
+						panelCustomerLogin.setVisible(false);
+						panelCustomerDashboard.setVisible(true);
+					}
+					else if(count > 1)
+					{
+						JOptionPane.showMessageDialog(null, "Duplicate users exist");
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "Username or password is incorrect");
+					}
+					pst.close();
+					rs.close();
+				} catch (SQLException e1) {					
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		
+		panelManagerLogin.btnLogIn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String query = "select * from manager_data where Username=? and Password=?";
+				conn = sqliteConnection.dbConnector();
+
+				try {
+					PreparedStatement pst = conn.prepareStatement(query);
+					pst.setString(1,panelManagerLogin.userNameField.getText());
+					pst.setString(2,panelManagerLogin.passwordField.getText());
+					
+					ResultSet rs = pst.executeQuery();
+					
+					int count = 0;
+					while(rs.next())
+					{
+						count++;
+						currentManagerId = rs.getString("IM_ID");
+					}
+					if(count == 1)
+					{
+						//JOptionPane.showMessageDialog(null, "Username and password is correct");
+						panelManagerLogin.setVisible(false);
+						panelManagerDashboard.setVisible(true);
+					}
+					else if(count > 1)
+					{
+						JOptionPane.showMessageDialog(null, "Duplicate users exist");
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "Username or password is incorrect");
+					}
+					pst.close();
+					rs.close();
+				} catch (SQLException e1) {					
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+		panelCustomerDashboard.btnSeller.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelCustomerDashboard.setVisible(false);
+				panelSellerDashboard.setVisible(true);
+			}
+		});
+		
+		panelCustomerDashboard.btnBuyer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelCustomerDashboard.setVisible(false);
+				panelBuyerDashboard.setVisible(true);
+			}
+		});
+		
+		ItemPanel panelItem = new ItemPanel();
+		contentPane.add(panelItem, "Item Panel");
+		
+		panelSellerDashboard.btnUploadAnItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelSellerDashboard.setVisible(false);
+				panelItem.setVisible(true);
+			}
+		});
+		
+		panelItem.btnUploadItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelItem.setVisible(false);
+				
+				panelItem.item.setPrice(Float.parseFloat(panelItem.textPrice.getText()));
+				panelItem.item.setWeight(Float.parseFloat(panelItem.textWeight.getText()));
+				panelItem.item.setAge(Integer.parseInt(panelItem.textWeight.getText()));
+				panelItem.item.setCompanyName(panelItem.textCompanyName.getText());
+				panelItem.item.setDetails(panelItem.textDetails.getText());
+				panelItem.item.setImageFile(panelItem.textImage.getText());
+				panelItem.item.getCategory().setName(panelItem.textCategory.getText());
+				panelItem.item.setCity(panelItem.textCity.getText());
+				
+				Connection conn = sqliteConnection.dbConnector();
+				Statement stmt = null;
+				try {
+					stmt = conn.createStatement();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				String update = "INSERT INTO item_data VALUES(" 								
+								+ "'" + panelItem.item.getPrice()+"',"								
+								+ "'" + panelItem.item.getAge() + "',"
+								+ "'" + panelItem.item.getCity() + "',"
+								+ "'" + panelItem.item.getCompanyName() + "',"
+								+ "'" + panelItem.item.getWeight() + "',"
+								+ "'" + panelItem.item.getDetails() + "',"
+								+ "'" + panelItem.item.getImageFile() + "',"
+								+ "'" + panelItem.item.getCategory().getName() + "',"
+								+ "'" + currentCustomerId + "',"
+								+ "'" + " "
+								+ "')";
+				try {
+					stmt.executeUpdate(update);
+					conn.close();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				
+				panelSellerDashboard.setVisible(true);
+			}
+		});
+		
 	}
-	
-	
 }
+	
+	

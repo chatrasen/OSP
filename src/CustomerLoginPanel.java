@@ -13,11 +13,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CustomerLoginPanel extends JPanel {
-	private JTextField userNameField;
-	private JPasswordField passwordField;
+	public JTextField userNameField;
+	public JPasswordField passwordField;
 	public JButton btnLogIn;
 	
-	Connection conn = null;
 
 	/**
 	 * Create the panel.
@@ -30,43 +29,7 @@ public class CustomerLoginPanel extends JPanel {
 		add(lblCustomerLoginPage);
 		
 		btnLogIn = new JButton("LOG IN");
-		btnLogIn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String query = "select * from customer_data where Username=? and Password=?";
-				conn = sqliteConnection.dbConnector();
-
-				try {
-					PreparedStatement pst = conn.prepareStatement(query);
-					pst.setString(1,userNameField.getText());
-					pst.setString(2,passwordField.getText());
-					
-					ResultSet rs = pst.executeQuery();
-					
-					int count = 0;
-					while(rs.next())
-					{
-						count++;
-					}
-					if(count == 1)
-					{
-						JOptionPane.showMessageDialog(null, "Username and password is correct");
-					}
-					else if(count > 1)
-					{
-						JOptionPane.showMessageDialog(null, "Duplicate users exist");
-					}
-					else
-					{
-						JOptionPane.showMessageDialog(null, "Username or password is incorrect");
-					}
-					pst.close();
-					rs.close();
-				} catch (SQLException e1) {					
-					e1.printStackTrace();
-				}
-				
-			}
-		});
+		
 		btnLogIn.setBounds(168, 170, 89, 23);
 		add(btnLogIn);
 		
