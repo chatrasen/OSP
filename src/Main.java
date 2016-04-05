@@ -121,7 +121,12 @@ public class Main extends JFrame {
 		
 		panelCustomer.btnIllCreateIt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
+				panelCustomer.textName.setText("");
+				panelCustomer.textCity.setText("");
+				panelCustomer.textEmail.setText("");
+				panelCustomer.textTelephone.setText("");
+				panelCustomer.textIM_ID.setText("");
 				panelCustomer.setVisible(false);
 				panelLogin.setVisible(true);
 			}
@@ -165,6 +170,12 @@ public class Main extends JFrame {
 					e1.printStackTrace();
 				}
 				
+				panelCustomer.textName.setText("");
+				panelCustomer.textCity.setText("");
+				panelCustomer.textEmail.setText("");
+				panelCustomer.textTelephone.setText("");
+				panelCustomer.textIM_ID.setText("");
+				
 				panelLogin.setVisible(true);
 				JOptionPane.showMessageDialog(null, "Account Created. Your password is "+password + ". Please Login to Continue.");
 			}
@@ -182,6 +193,14 @@ public class Main extends JFrame {
 		
 		panelManager.btnIWillTry.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				panelManager.textName.setText("");
+				panelManager.textGender.setText("");
+				panelManager.textEmail.setText("");
+				panelManager.textTelephone.setText("");
+				panelManager.textIM_ID.setText("");
+				panelManager.textDOB.setText("");
+				panelManager.textAddress.setText("");
+				panelManager.textBiometricID.setText("");
 				panelManager.setVisible(false);
 				panelLogin.setVisible(true);				
 			}
@@ -230,7 +249,14 @@ public class Main extends JFrame {
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
-				
+				panelManager.textName.setText("");
+				panelManager.textGender.setText("");
+				panelManager.textEmail.setText("");
+				panelManager.textTelephone.setText("");
+				panelManager.textIM_ID.setText("");
+				panelManager.textDOB.setText("");
+				panelManager.textAddress.setText("");
+				panelManager.textBiometricID.setText("");
 				panelLogin.setVisible(true);
 				JOptionPane.showMessageDialog(null, "Account Created. Your password is "+password + ". Please Login to Continue.");
 				//SendMail.send("vaiagarwal96@gmail.com","chatrasen@gmail.com");
