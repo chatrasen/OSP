@@ -151,33 +151,60 @@ public class Main extends JFrame {
 					e1.printStackTrace();
 				}
 
-				String username = panelCustomer.customer.getEmail();
-				String password = generatePassword();
-				System.out.println(username);
-				String update = "INSERT INTO customer_data VALUES(" 								
-								+ "'" + panelCustomer.customer.getName()+"',"
-								+ "'" + username + "',"
-								+ "'" + password + "',"
-								+ "'" + panelCustomer.customer.getTelephone() + "',"
-								+ "'" + panelCustomer.customer.getIM_ID() + "',"
-								+ "'" + panelCustomer.customer.getCity() + "',"
-								+ "'" + panelCustomer.customer.getEmail()
-								+ "')";
-				try {
-					stmt.executeUpdate(update);
-					conn.close();
-				} catch (SQLException e1) {
-					e1.printStackTrace();
+				int boole = 0;
+				if(panelCustomer.customer.getName().compareTo("")==0){
+					boole=1;
 				}
+				if(panelCustomer.customer.getTelephone().compareTo("")==0){
+					boole=1;
+				}
+				if(panelCustomer.customer.getIM_ID().compareTo("")==0){
+					boole=1;
+				}
+				if(panelCustomer.customer.getCity().compareTo("")==0){
+					boole=1;
+				}
+				if(panelCustomer.customer.getEmail().compareTo("")==0){
+					boole=1;
+				}
+				if(boole==1){
+					panelCustomer.textName.setText("");
+					panelCustomer.textCity.setText("");
+					panelCustomer.textEmail.setText("");
+					panelCustomer.textTelephone.setText("");
+					panelCustomer.textIM_ID.setText("");
+					JOptionPane.showMessageDialog(null, "No field can be left blank");
+				}
+				else{
+					String username = panelCustomer.customer.getEmail();
+					String password = generatePassword();
+					System.out.println(username);
+					String update = "INSERT INTO customer_data VALUES(" 								
+									+ "'" + panelCustomer.customer.getName()+"',"
+									+ "'" + username + "',"
+									+ "'" + password + "',"
+									+ "'" + panelCustomer.customer.getTelephone() + "',"
+									+ "'" + panelCustomer.customer.getIM_ID() + "',"
+									+ "'" + panelCustomer.customer.getCity() + "',"
+									+ "'" + panelCustomer.customer.getEmail()
+									+ "')";
+					try {
+						stmt.executeUpdate(update);
+						conn.close();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+					
+					panelCustomer.textName.setText("");
+					panelCustomer.textCity.setText("");
+					panelCustomer.textEmail.setText("");
+					panelCustomer.textTelephone.setText("");
+					panelCustomer.textIM_ID.setText("");
+					
+					panelLogin.setVisible(true);
+					JOptionPane.showMessageDialog(null, "Account Created. Your password is "+password + ". Please Login to Continue.");
 				
-				panelCustomer.textName.setText("");
-				panelCustomer.textCity.setText("");
-				panelCustomer.textEmail.setText("");
-				panelCustomer.textTelephone.setText("");
-				panelCustomer.textIM_ID.setText("");
-				
-				panelLogin.setVisible(true);
-				JOptionPane.showMessageDialog(null, "Account Created. Your password is "+password + ". Please Login to Continue.");
+				}
 			}
 		});
 		/**/
@@ -228,38 +255,76 @@ public class Main extends JFrame {
 					e1.printStackTrace();
 				}
 
-				String username = panelManager.manager.getEmail();
-				String password = generatePassword();
-				System.out.println(username);
-				String update = "INSERT INTO manager_data VALUES(" 								
-								+ "'" + panelManager.manager.getName()+"',"
-								+ "'" + username + "',"
-								+ "'" + password + "',"
-								+ "'" + panelManager.manager.getTelephone() + "',"
-								+ "'" + panelManager.manager.getIM_ID() + "',"
-								+ "'" + panelManager.manager.getGender() + "',"
-								+ "'" + panelManager.manager.getEmail() + "',"
-								+ "'" + panelManager.manager.getDateOfBirth() + "',"
-								+ "'" + panelManager.manager.getAddress() + "',"
-								+ "'" + panelManager.manager.getBiometricID()
-								+ "')";
-				try {
-					stmt.executeUpdate(update);
-					conn.close();
-				} catch (SQLException e1) {
-					e1.printStackTrace();
+				int boole = 0;
+				if(panelManager.manager.getName().compareTo("")==0){
+					boole=1;
 				}
-				panelManager.textName.setText("");
-				panelManager.textGender.setText("");
-				panelManager.textEmail.setText("");
-				panelManager.textTelephone.setText("");
-				panelManager.textIM_ID.setText("");
-				panelManager.textDOB.setText("");
-				panelManager.textAddress.setText("");
-				panelManager.textBiometricID.setText("");
-				panelLogin.setVisible(true);
-				JOptionPane.showMessageDialog(null, "Account Created. Your password is "+password + ". Please Login to Continue.");
-				//SendMail.send("vaiagarwal96@gmail.com","chatrasen@gmail.com");
+				if(panelManager.manager.getTelephone().compareTo("")==0){
+					boole=1;
+				}
+				if(panelManager.manager.getIM_ID().compareTo("")==0){
+					boole=1;
+				}
+				if(panelManager.manager.getGender().compareTo("")==0){
+					boole=1;
+				}
+				if(panelManager.manager.getEmail().compareTo("")==0){
+					boole=1;
+				}
+				if(panelManager.manager.getDateOfBirth().compareTo("")==0){
+					boole=1;
+				}
+				if(panelManager.manager.getAddress().compareTo("")==0){
+					boole=1;
+				}
+				if(panelManager.manager.getBiometricID().compareTo("")==0){
+					boole=1;
+				}
+				if(boole==1){
+					panelManager.textName.setText("");
+					panelManager.textGender.setText("");
+					panelManager.textEmail.setText("");
+					panelManager.textTelephone.setText("");
+					panelManager.textIM_ID.setText("");
+					panelManager.textDOB.setText("");
+					panelManager.textAddress.setText("");
+					panelManager.textBiometricID.setText("");
+					JOptionPane.showMessageDialog(null, "No field can be left blank");
+				}
+				else{
+					String username = panelManager.manager.getEmail();
+					String password = generatePassword();
+					System.out.println(username);
+					String update = "INSERT INTO manager_data VALUES(" 								
+									+ "'" + panelManager.manager.getName()+"',"
+									+ "'" + username + "',"
+									+ "'" + password + "',"
+									+ "'" + panelManager.manager.getTelephone() + "',"
+									+ "'" + panelManager.manager.getIM_ID() + "',"
+									+ "'" + panelManager.manager.getGender() + "',"
+									+ "'" + panelManager.manager.getEmail() + "',"
+									+ "'" + panelManager.manager.getDateOfBirth() + "',"
+									+ "'" + panelManager.manager.getAddress() + "',"
+									+ "'" + panelManager.manager.getBiometricID()
+									+ "')";
+					try {
+						stmt.executeUpdate(update);
+						conn.close();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+					panelManager.textName.setText("");
+					panelManager.textGender.setText("");
+					panelManager.textEmail.setText("");
+					panelManager.textTelephone.setText("");
+					panelManager.textIM_ID.setText("");
+					panelManager.textDOB.setText("");
+					panelManager.textAddress.setText("");
+					panelManager.textBiometricID.setText("");
+					panelLogin.setVisible(true);
+					JOptionPane.showMessageDialog(null, "Account Created. Your password is "+password + ". Please Login to Continue.");
+					//SendMail.send("vaiagarwal96@gmail.com","chatrasen@gmail.com");
+				}
 			}
 		});
 		CustomerDashboardPanel panelCustomerDashboard = new CustomerDashboardPanel();
@@ -387,54 +452,97 @@ public class Main extends JFrame {
 		panelItem.btnUploadItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panelItem.setVisible(false);
-				
-				panelItem.item.setPrice(Float.parseFloat(panelItem.textPrice.getText()));
-				panelItem.item.setWeight(Float.parseFloat(panelItem.textWeight.getText()));
-				panelItem.item.setAge(Integer.parseInt(panelItem.textWeight.getText()));
-				panelItem.item.setCompanyName(panelItem.textCompanyName.getText());
-				panelItem.item.setDetails(panelItem.textDetails.getText());
-				panelItem.item.setImageFile(panelItem.textImage.getText());
-				panelItem.item.getCategory().setName(panelItem.textCategory.getText());
-				panelItem.item.setCity(panelItem.textCity.getText());
-				
-				Connection conn = sqliteConnection.dbConnector();
-				Statement stmt = null;
-				try {
-					stmt = conn.createStatement();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				int boole = 0;
+				if(panelItem.textPrice.getText().compareTo("")==0){
+					boole=1;
 				}
-				
-				String update = "INSERT INTO item_data VALUES(" 								
-								+ "'" + panelItem.item.getPrice()+"',"								
-								+ "'" + panelItem.item.getAge() + "',"
-								+ "'" + panelItem.item.getCity() + "',"
-								+ "'" + panelItem.item.getCompanyName() + "',"
-								+ "'" + panelItem.item.getWeight() + "',"
-								+ "'" + panelItem.item.getDetails() + "',"
-								+ "'" + panelItem.item.getImageFile() + "',"
-								+ "'" + panelItem.item.getCategory().getName() + "',"
-								+ "'" + currentCustomerId + "',"
-								+ "'" + " "
-								+ "')";
-				try {
-					stmt.executeUpdate(update);
-					conn.close();
-				} catch (SQLException e1) {
-					e1.printStackTrace();
+				if(panelItem.textWeight.getText().compareTo("")==0){
+					boole=1;
 				}
-				
-				panelItem.textAge.setText("");
-				panelItem.textPrice.setText("");
-				panelItem.textCity.setText("");
-				panelItem.textCompanyName.setText("");
-				panelItem.textWeight.setText("");
-				panelItem.textDetails.setText("");
-				panelItem.textCategory.setText("");
-				panelItem.textImage.setText("");
-				
-				panelSellerDashboard.setVisible(true);
+				if(panelItem.textAge.getText().compareTo("")==0){
+					boole=1;
+				}
+				if(panelItem.textCompanyName.getText().compareTo("")==0){
+					boole=1;
+				}
+				if(panelItem.textDetails.getText().compareTo("")==0){
+					boole=1;
+				}
+				if(panelItem.textImage.getText().compareTo("")==0){
+					boole=1;
+				}
+				if(panelItem.textCategory.getText().compareTo("")==0){
+					boole=1;
+				}
+				if(panelItem.textCity.getText().compareTo("")==0){
+					boole=1;
+				}
+				if(boole==1){
+					panelItem.textAge.setText("");
+					panelItem.textPrice.setText("");
+					panelItem.textCity.setText("");
+					panelItem.textCompanyName.setText("");
+					panelItem.textWeight.setText("");
+					panelItem.textDetails.setText("");
+					panelItem.textCategory.setText("");
+					panelItem.textImage.setText("");
+					JOptionPane.showMessageDialog(null, "Enter all fields");
+				}
+				else{
+					try{
+						panelItem.item.setPrice(Float.parseFloat(panelItem.textPrice.getText()));
+						panelItem.item.setWeight(Float.parseFloat(panelItem.textWeight.getText()));
+						panelItem.item.setAge(Integer.parseInt(panelItem.textAge.getText()));
+					}			
+					catch(Exception exp){
+						JOptionPane.showMessageDialog(null, "Enter in suitable formats");
+					}
+					panelItem.item.setCompanyName(panelItem.textCompanyName.getText());
+					panelItem.item.setDetails(panelItem.textDetails.getText());
+					panelItem.item.setImageFile(panelItem.textImage.getText());
+					panelItem.item.getCategory().setName(panelItem.textCategory.getText());
+					panelItem.item.setCity(panelItem.textCity.getText());
+					
+					Connection conn = sqliteConnection.dbConnector();
+					Statement stmt = null;
+					try {
+						stmt = conn.createStatement();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					
+					String update = "INSERT INTO item_data VALUES(" 								
+									+ "'" + panelItem.item.getPrice()+"',"								
+									+ "'" + panelItem.item.getAge() + "',"
+									+ "'" + panelItem.item.getCity() + "',"
+									+ "'" + panelItem.item.getCompanyName() + "',"
+									+ "'" + panelItem.item.getWeight() + "',"
+									+ "'" + panelItem.item.getDetails() + "',"
+									+ "'" + panelItem.item.getImageFile() + "',"
+									+ "'" + panelItem.item.getCategory().getName() + "',"
+									+ "'" + currentCustomerId + "',"
+									+ "'" + " "
+									+ "')";
+					try {
+						stmt.executeUpdate(update);
+						conn.close();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+					
+					panelItem.textAge.setText("");
+					panelItem.textPrice.setText("");
+					panelItem.textCity.setText("");
+					panelItem.textCompanyName.setText("");
+					panelItem.textWeight.setText("");
+					panelItem.textDetails.setText("");
+					panelItem.textCategory.setText("");
+					panelItem.textImage.setText("");
+					
+					panelSellerDashboard.setVisible(true);
+				}
 			}
 		});
 		
