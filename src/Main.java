@@ -292,6 +292,8 @@ public class Main extends JFrame {
 						count++;
 						currentCustomerId = rs.getString("IM_ID");
 					}
+					panelCustomerLogin.userNameField.setText("");
+					panelCustomerLogin.passwordField.setText("");
 					if(count == 1)
 					{
 						//JOptionPane.showMessageDialog(null, "Username and password is correct");
@@ -333,6 +335,8 @@ public class Main extends JFrame {
 						count++;
 						currentManagerId = rs.getString("IM_ID");
 					}
+					panelManagerLogin.userNameField.setText("");
+					panelManagerLogin.passwordField.setText("");
 					if(count == 1)
 					{
 						//JOptionPane.showMessageDialog(null, "Username and password is correct");
@@ -420,6 +424,15 @@ public class Main extends JFrame {
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
+				
+				panelItem.textAge.setText("");
+				panelItem.textPrice.setText("");
+				panelItem.textCity.setText("");
+				panelItem.textCompanyName.setText("");
+				panelItem.textWeight.setText("");
+				panelItem.textDetails.setText("");
+				panelItem.textCategory.setText("");
+				panelItem.textImage.setText("");
 				
 				panelSellerDashboard.setVisible(true);
 			}
