@@ -32,8 +32,8 @@ public class CustomerDashboardPanel extends JPanel {
 		add(btnSeller);
 		
 		lblYouHaveSuccessfully = new JLabel("You have successfully logged in as a customer");
-		lblYouHaveSuccessfully.setFont(new Font("Tahoma", Font.ITALIC, 18));
-		lblYouHaveSuccessfully.setBounds(20, 39, 430, 31);
+		lblYouHaveSuccessfully.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblYouHaveSuccessfully.setBounds(37, 39, 430, 31);
 		add(lblYouHaveSuccessfully);
 	}
 

@@ -14,6 +14,7 @@ public class ImageSpecs extends JPanel {
 	public JButton btnBack;
 	public JButton btnAddToCart;
 	public JButton btnRemoveFromCart;
+	public JButton btnNegotiate;
 	/**
 	 * Create the panel.
 	 */
@@ -52,6 +53,11 @@ public class ImageSpecs extends JPanel {
 		
 		btnRemoveFromCart.setBounds(349, 306, 164, 23);
 		add(btnRemoveFromCart);
+		
+		btnNegotiate = new JButton("Negotiate");
+		
+		btnNegotiate.setBounds(439, 157, 105, 23);
+		add(btnNegotiate);
 		
 	}	
 }

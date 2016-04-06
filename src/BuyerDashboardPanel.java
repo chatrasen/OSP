@@ -77,11 +77,11 @@ public class BuyerDashboardPanel extends JPanel {
 		
 		btnLogout = new JButton("Logout");
 		
-		btnLogout.setBounds(434, 11, 89, 23);
+		btnLogout.setBounds(450, 11, 89, 23);
 		add(btnLogout);
 		
 		scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(424, 76, 99, 122);
+		scrollPane_2.setBounds(424, 76, 147, 123);
 		add(scrollPane_2);
 		
 		listCart = new JList<Object>(modelCart);
@@ -92,11 +92,11 @@ public class BuyerDashboardPanel extends JPanel {
 		add(lblCart);
 		
 		scrollPane_3 = new JScrollPane();
-		scrollPane_3.setBounds(434, 235, 105, 115);
+		scrollPane_3.setBounds(434, 235, 137, 115);
 		add(scrollPane_3);
 		
 		listMessages = new JList<Object>(modelMessages);
-		scrollPane_3.setRowHeaderView(listMessages);
+		scrollPane_3.setViewportView(listMessages);
 		
 		lblMessages = new JLabel("Messages");
 		lblMessages.setBounds(454, 210, 85, 14);

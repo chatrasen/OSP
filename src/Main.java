@@ -168,7 +168,7 @@ public class Main extends JFrame {
 								+ "'" + customerId + "',"
 								+ "'" + "" + "',"
 								+ "'" + "" + "',"
-								+ "," + ""
+								+ "'" + ""
 								+ "')";
 				try {
 					stmt.executeUpdate(update);
@@ -819,6 +819,76 @@ public class Main extends JFrame {
 					e1.printStackTrace();
 				}
 				panelBuyerDashboard.setVisible(true);
+			}
+		});
+		
+		panelImageSpecs.btnNegotiate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+					conn = sqliteConnection.dbConnector();
+				    Statement stmt = null;
+				    float revisedPrice = 0;
+				    boolean priceRevised = false;
+				    while(true)
+				    {
+				    	try{
+				    		revisedPrice = Float.parseFloat(JOptionPane.showInputDialog(null, "Enter the amount you want to lower the price to:"));
+				    		priceRevised = true;
+				    		break;
+				    	}
+				    	catch(Exception e1)
+				    	{
+				    		JOptionPane.showMessageDialog(null, "Invalid Input Format");
+				    	}
+				    }
+		    		JOptionPane.showMessageDialog(null, "Your request has been sent to the seller");
+
+					stmt = (Statement) conn.createStatement();
+					ResultSet rs = stmt.executeQuery( "SELECT * FROM item_data Where Item_Id = '"+currentItemId+"'" );					
+					String sellerId = rs.getString("UploaderId");
+					System.out.println(sellerId);
+					rs.close();
+
+					ResultSet rs1 = conn.createStatement().executeQuery("SELECT * from customer_data where Customer_id = '"+ sellerId +"'");					
+					String sellerMsg = "";
+				
+					sellerMsg = rs1.getString("Seller_msg");
+					System.out.println(sellerMsg);
+					
+					String[] imageIds = null;
+					if(sellerMsg!="")
+						imageIds = sellerMsg.split("\\s+");
+					
+					int len = 0;
+					if(imageIds != null)
+						len = imageIds.length;
+					
+					boolean found = false;
+					
+					for(int i=0; i<len; i++)
+					{
+						if(imageIds[i].compareTo(currentItemId)==0 && priceRevised)
+						{
+							imageIds[i+1] = Float.toString(revisedPrice);
+							found = true;
+						}
+					}
+					sellerMsg = "";
+					for(int i=0; i<len; i++)
+					{
+						sellerMsg += " " + imageIds[i];
+					}
+					
+					if(!found)
+						sellerMsg += " " + currentItemId + " " + revisedPrice;
+					
+					stmt.executeUpdate("UPDATE customer_data SET Seller_msg = '" + sellerMsg + "' "+ "Where Customer_id = '"+sellerId+"'");
+					conn.close();
+				}
+				catch(SQLException e1)
+				{
+					e1.printStackTrace();
+				}
 			}
 		});
 		
