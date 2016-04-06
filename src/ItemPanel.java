@@ -24,7 +24,8 @@ public class ItemPanel extends JPanel {
 	public JButton btnUploadImage;
 	
 	public Item item = new Item();
-	private JLabel label;
+	public JLabel labelImage;
+	public JButton btnUpdate;
 
 	/**
 	 * Create the panel.
@@ -113,7 +114,7 @@ public class ItemPanel extends JPanel {
 		          Image image = imageIcon.getImage(); 
 		          Image newimg = image.getScaledInstance(123, 88, java.awt.Image.SCALE_SMOOTH);  
 		          imageIcon = new ImageIcon(newimg); 
-		          label.setIcon(imageIcon);
+		          labelImage.setIcon(imageIcon);
 		        }
 			}
 		});
@@ -126,9 +127,14 @@ public class ItemPanel extends JPanel {
 		textImage.setColumns(10);
 		textImage.setEditable(false);
 		
-		label = new JLabel("");
-		label.setBounds(317, 11, 123, 88);
-		add(label);
+		labelImage = new JLabel("");
+		labelImage.setBounds(317, 11, 123, 88);
+		add(labelImage);
+		
+		btnUpdate = new JButton("Update");
+		
+		btnUpdate.setBounds(295, 247, 89, 23);
+		add(btnUpdate);
 		
 	}
 }
