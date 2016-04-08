@@ -5,6 +5,7 @@ public class ImagesAndText {
 	private Icon img;
 	private String itemId;
 	public boolean isInserted;
+	public float price;
 	
 	public String getItemId() {
 		return itemId;

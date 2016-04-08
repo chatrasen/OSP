@@ -78,6 +78,7 @@ public class Main extends JFrame {
 		contentPane.setLayout(new CardLayout(0, 0));	
 		
 		LoginPanel panelLogin = new LoginPanel();
+		panelLogin.btnRegister.setBounds(183, 78, 112, 23);
 		contentPane.add(panelLogin, "Login panel");
 		
 		RegisterPanel panelRegister = new RegisterPanel();
@@ -428,8 +429,140 @@ public class Main extends JFrame {
 					e1.printStackTrace();
 				}
 				panelSellerDashboard.setVisible(true);
+				
+				try{
+					Connection conn = null;
+					conn = sqliteConnection.dbConnector();
+				    Statement stmt = null;
+				    
+					stmt = (Statement) conn.createStatement();
+					ResultSet rs = stmt.executeQuery( "SELECT * FROM customer_data where Customer_id = '" + currentCustomerId + "'");
+					panelSellerDashboard.modelNego.clear();
+					
+					String sellerMsg = null;
+					while(rs.next())
+					{
+						sellerMsg = rs.getString("Seller_msg");
+					}		
+					
+					String[] imageIds = null;
+					if(sellerMsg!=null)
+						imageIds = sellerMsg.split("\\s+");
+
+					
+					int len = 0;
+					if(imageIds != null)
+						len = imageIds.length;
+					for(int i =0; i<len; i++)
+					{						
+						rs = stmt.executeQuery("SELECT * FROM item_data where Item_Id = '" + imageIds[i] + "'");
+						if(!rs.next())
+							continue;
+						
+						boolean inserted = false;
+						
+						
+						ImageIcon imageIcon = new ImageIcon(rs.getString("Image_File"));				
+						Image image = imageIcon.getImage(); 
+						Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH);  
+						imageIcon = new ImageIcon(newimg);  
+						inserted = true;
+						panelSellerDashboard.modelNego.addElement(new ImagesAndText("Price: " + imageIds[i+1], imageIcon, rs.getString("Item_Id"), inserted));					
+					
+						
+					}
+					conn.close();
+					
+					panelSellerDashboard.listNegoReq.setCellRenderer(new Renderer());
+					
+				}
+				catch(SQLException e1)
+				{
+					e1.printStackTrace();
+				}
+			}
+			
+			
+		});
+		
+		panelSellerDashboard.listNegoReq.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				try{
+					conn = sqliteConnection.dbConnector();
+				    Statement stmt = null;
+				    float revisedPrice = 0;
+				    boolean priceRevised = false;
+				    
+				    int index = panelSellerDashboard.listNegoReq.locationToIndex(e.getPoint());
+				    ImagesAndText is = (ImagesAndText)panelSellerDashboard.modelNego.getElementAt(index);
+				    currentItemId = is.getItemId();
+				    
+				    while(true)
+				    {
+				    	try{
+				    		revisedPrice = Float.parseFloat(JOptionPane.showInputDialog(null, "Enter the amount you want to sell your item for:"));
+				    		priceRevised = true;
+				    		break;
+				    	}
+				    	catch(Exception e1)
+				    	{
+				    		JOptionPane.showMessageDialog(null, "Invalid Input Format");
+				    	}
+				    }
+		    		JOptionPane.showMessageDialog(null, "The new price has been updated with the buyer");
+
+					stmt = (Statement) conn.createStatement();
+					ResultSet rs = stmt.executeQuery( "SELECT * FROM item_data Where Item_Id = '"+currentItemId+"'" );					
+					String buyerId = rs.getString("BuyerId");
+					rs.close();
+
+					rs = conn.createStatement().executeQuery("SELECT * from customer_data where Customer_id = '"+ buyerId +"'");					
+					String buyerMsg = "";
+				
+					buyerMsg = rs.getString("Buyer_msg");
+					
+					String[] imageIds = null;
+					if(buyerMsg!="")
+						imageIds = buyerMsg.split("\\s+");
+					
+					int len = 0;
+					if(imageIds != null)
+						len = imageIds.length;
+					
+					boolean found = false;
+					
+					for(int i=0; i<len; i++)
+					{
+						if(imageIds[i].compareTo(currentItemId)==0 && priceRevised)
+						{
+							imageIds[i+1] = Float.toString(revisedPrice);
+							found = true;
+						}
+					}
+					buyerMsg = "";
+					for(int i=0; i<len; i++)
+					{
+						buyerMsg += " " + imageIds[i];
+					}
+					
+					if(!found)
+						buyerMsg += " " + currentItemId + " " + revisedPrice;
+					
+					stmt.executeUpdate("UPDATE customer_data SET Buyer_msg = '" + buyerMsg + "' "+ "Where Customer_id = '"+buyerId+"'");
+					conn.close();
+				}
+				catch(SQLException e1)
+				{
+					e1.printStackTrace();
+				}
+				
+				
+				
 			}
 		});
+		
 		
 		Vector<ImagesAndText> cartItems = new Vector<ImagesAndText>();
 		
@@ -490,8 +623,64 @@ public class Main extends JFrame {
 				
 				panelBuyerDashboard.setVisible(true);
 				setBounds(100, 100, 600, 400);
-			}
+				
+				try{
+					Connection conn = null;
+					conn = sqliteConnection.dbConnector();
+				    Statement stmt = null;
+				    
+					stmt = (Statement) conn.createStatement();
+					ResultSet rs = stmt.executeQuery( "SELECT * FROM customer_data where Customer_id = '" + currentCustomerId + "'");
+					panelBuyerDashboard.modelMessages.clear();
+					
+					String buyerMsg = null;
+					while(rs.next())
+					{
+						buyerMsg = rs.getString("Buyer_msg");
+					}		
+					
+					String[] imageIds = null;
+					if(buyerMsg!=null)
+						imageIds = buyerMsg.split("\\s+");
+
+					
+					int len = 0;
+					if(imageIds != null)
+						len = imageIds.length;
+					for(int i =0; i<len; i++)
+					{						
+						rs = stmt.executeQuery("SELECT * FROM item_data where Item_Id = '" + imageIds[i] + "'");
+						if(!rs.next())
+							continue;
+						
+						boolean inserted = false;
+						
+						
+						ImageIcon imageIcon = new ImageIcon(rs.getString("Image_File"));				
+						Image image = imageIcon.getImage(); 
+						Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH);  
+						imageIcon = new ImageIcon(newimg);  
+						inserted = true;
+						panelBuyerDashboard.modelMessages.addElement(new ImagesAndText("Price: " + imageIds[i+1], imageIcon, rs.getString("Item_Id"), inserted));					
+					
+						
+					}
+					conn.close();
+					
+					panelBuyerDashboard.listMessages.setCellRenderer(new Renderer());
+					
+				}
+				catch(SQLException e1)
+				{
+					e1.printStackTrace();
+				}
+			}		
+			
 		});	
+		
+		
+		
+		
 		
 		
 		ItemPanel panelItem = new ItemPanel();
@@ -953,6 +1142,59 @@ public class Main extends JFrame {
 				}
 			}
 		});
+	panelBuyerDashboard.listMessages.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				panelImageSpecs.btnAddToCart.setVisible(false);
+				panelImageSpecs.btnRemoveFromCart.setVisible(false);
+
+				if(e.getClickCount()==2)
+				{
+					panelBuyerDashboard.setVisible(false);
+					conn = sqliteConnection.dbConnector();
+					
+					
+					try {
+						conn = sqliteConnection.dbConnector();
+					    Statement stmt = null;
+					    
+					    int index = panelBuyerDashboard.listMessages.locationToIndex(e.getPoint());
+					    ImagesAndText is = (ImagesAndText)panelBuyerDashboard.modelMessages.getElementAt(index);
+					    currentItemId = is.getItemId();
+					    
+						stmt = (Statement) conn.createStatement();
+						ResultSet rs = stmt.executeQuery( "SELECT * FROM item_data where Item_Id = '"+currentItemId + "'");						
+						
+						
+						panelImageSpecs.textArea.setText(null);
+						
+						panelImageSpecs.textArea.append("Price: " + rs.getString("Price") + "\n");
+						panelImageSpecs.textArea.append("Age: " + rs.getString("Age") + "\n");
+						panelImageSpecs.textArea.append("City: " + rs.getString("City") + "\n");
+						panelImageSpecs.textArea.append("Company Name: " + rs.getString("Company_Name")+ "\n");
+						panelImageSpecs.textArea.append("Weight: " + rs.getString("Weight") + "\n");
+						panelImageSpecs.textArea.append("Details: " + rs.getString("Details")+ "\n");
+						panelImageSpecs.textArea.append("Category: " + rs.getString("Category") + "\n");
+							
+						ImageIcon imageIcon = new ImageIcon(rs.getString("Image_File"));				
+						Image image = imageIcon.getImage(); 
+						Image newimg = image.getScaledInstance(172, 182, java.awt.Image.SCALE_SMOOTH);  
+						imageIcon = new ImageIcon(newimg); 
+						panelImageSpecs.lblImage.setIcon(imageIcon);
+						
+						
+						conn.close();
+					} catch (SQLException e1) {					
+						e1.printStackTrace();
+					}
+					
+					panelImageSpecs.setVisible(true);
+				}
+				
+				
+			}
+		});
 		
 		panelImageSpecs.btnRemoveFromCart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1071,6 +1313,7 @@ public class Main extends JFrame {
 						sellerMsg += " " + currentItemId + " " + revisedPrice;
 					
 					stmt.executeUpdate("UPDATE customer_data SET Seller_msg = '" + sellerMsg + "' "+ "Where Customer_id = '"+sellerId+"'");
+					conn.createStatement().executeUpdate("Update item_data SET BuyerId = '"+currentCustomerId+"' Where Item_Id = '" + currentItemId + "'" );
 					conn.close();
 				}
 				catch(SQLException e1)
@@ -1094,6 +1337,7 @@ public class Main extends JFrame {
 				panelLogin.setVisible(true);
 			}
 		});
+		
 		panelSellerDashboard.btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panelSellerDashboard.setVisible(false);
