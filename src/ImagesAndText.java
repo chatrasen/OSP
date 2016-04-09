@@ -13,12 +13,13 @@ public class ImagesAndText {
 	public void setItemId(String itemId) {
 		this.itemId = itemId;
 	}
-	public ImagesAndText(String text, Icon icon, String itemId, boolean isInserted)
+	public ImagesAndText(String text, Icon icon, String itemId, boolean isInserted, float price)
 	{
 		this.name = text;
 		this.img = icon;
 		this.itemId = itemId;
 		this.isInserted = isInserted;
+		this.price = price;
 	}
 	public String getName() {
 		return name;
