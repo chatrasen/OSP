@@ -424,6 +424,8 @@ public class Main extends JFrame {
 					}
 					conn.close();
 					
+					
+					
 					panelSellerDashboard.listUploadedItems.setCellRenderer(new Renderer());
 					
 				}
@@ -483,9 +485,121 @@ public class Main extends JFrame {
 				{
 					e1.printStackTrace();
 				}
+				
+				try{
+					Connection conn = null;
+					conn = sqliteConnection.dbConnector();
+				    Statement stmt = null;
+				    
+					stmt = (Statement) conn.createStatement();
+					ResultSet rs = stmt.executeQuery( "SELECT * FROM customer_data where Customer_id = '" + currentCustomerId + "'");
+					panelSellerDashboard.modelBuy.clear();
+					
+					String buyReq = null;
+					while(rs.next())
+					{
+						buyReq = rs.getString("Buy_req");
+					}		
+					
+					String[] imageIds = null;
+					if(buyReq!=null)
+						imageIds = buyReq.split("\\s+");
+
+					
+					int len = 0;
+					if(imageIds != null)
+						len = imageIds.length;
+					for(int i =0; i<len; i++)
+					{						
+						rs = stmt.executeQuery("SELECT * FROM item_data where Item_Id = '" + imageIds[i] + "'");
+						if(!rs.next())
+							continue;
+						
+						boolean inserted = false;
+						
+						
+						ImageIcon imageIcon = new ImageIcon(rs.getString("Image_File"));				
+						Image image = imageIcon.getImage(); 
+						Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH);  
+						imageIcon = new ImageIcon(newimg);  
+						inserted = true;
+						panelSellerDashboard.modelBuy.addElement(new ImagesAndText("Price: " + imageIds[i+1] + " Customer_Id: " + imageIds[i+2], imageIcon, rs.getString("Item_Id"), inserted, Float.parseFloat(rs.getString("Price"))));					
+					
+						
+					}
+					conn.close();
+					
+					panelSellerDashboard.listBuyReq.setCellRenderer(new Renderer());
+					
+				}
+				catch(SQLException e1)
+				{
+					e1.printStackTrace();
+				}
 			}
 			
 			
+		});
+		
+		panelSellerDashboard.listBuyReq.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				try{
+					conn = sqliteConnection.dbConnector();
+				   
+				    
+				    int index = panelSellerDashboard.listBuyReq.locationToIndex(e.getPoint());
+				    ImagesAndText is = (ImagesAndText)panelSellerDashboard.modelBuy.getElementAt(index);
+				    currentItemId = is.getItemId();
+				    
+					ResultSet rs = conn.createStatement().executeQuery( "SELECT * FROM item_data Where Item_Id = '"+currentItemId+"'" );					
+					String buyerId = rs.getString("BuyerId");
+
+				 
+		    		JOptionPane.showMessageDialog(null, "The Item with item Id " + currentItemId + " has been delivered to the customer with Customer_Id " + buyerId);
+ 
+
+					rs = conn.createStatement().executeQuery("SELECT * from customer_data where Customer_id = '"+ buyerId +"'");					
+					String buyReq = "";
+				
+					buyReq = rs.getString("Buy_req");
+					
+					String[] imageIds = null;
+					if(buyReq!="")
+						imageIds = buyReq.split("\\s+");
+					
+					int len = 0;
+					if(imageIds != null)
+						len = imageIds.length;
+					
+					for(int i=0; i<len; i++)
+					{
+						if(currentItemId.compareTo(imageIds[i])==0)
+						{
+							i+=2;
+							continue;
+						}
+						else
+						{
+							buyReq += " " + imageIds[i];
+						}
+					}
+					
+					conn.createStatement().executeUpdate("UPDATE customer_data SET Buy_req = '" + buyReq + "' "+ "Where Customer_id = '"+buyerId+"'");
+					conn.close();
+					
+					panelSellerDashboard.modelBuy.removeElementAt(index);
+					panelSellerDashboard.listBuyReq.setCellRenderer(new Renderer());
+				}
+				catch(SQLException e1)
+				{
+					e1.printStackTrace();
+				}
+				
+				
+				
+			}
 		});
 		
 		panelSellerDashboard.listNegoReq.addMouseListener(new MouseAdapter() {
@@ -1393,16 +1507,38 @@ public class Main extends JFrame {
 			    	Connection conn = null;
 					conn = sqliteConnection.dbConnector();
 					
-					ResultSet rs = null;
+					ResultSet rs = null;				
+					String buyReq = null;
+					//rs = conn.createStatement().executeQuery("SELECT * from customer_data where Customer_id = '"+  +"'")
 					
 					for(int i=0; i<panelBuyerDashboard.modelCart.size(); i++)
-					{
+					{					    
+					    ImagesAndText is = (ImagesAndText)panelBuyerDashboard.modelCart.getElementAt(i);
+					    String itemId = is.getItemId();
+						rs = conn.createStatement().executeQuery("SELECT * from item_data where Item_Id = '"+ itemId +"'");
 						
+						String customerId = rs.getString("UploaderId");
+						rs = conn.createStatement().executeQuery("SELECT * from customer_data where Customer_id = '"+ customerId +"'");
+						
+						buyReq = rs.getString("Buy_req");
+						buyReq += " " + itemId + " " + is.price + " " + " "  + customerId;
+						
+						conn.createStatement().executeUpdate("Update customer_data SET Buy_req = '"+buyReq+"' Where Customer_id = '" + customerId + "'");
+						conn.createStatement().executeUpdate("Update item_data SET BuyerId = '"+currentCustomerId+"' Where Item_Id = '" + itemId + "'");	
 					}
 					
+					panelBuyerDashboard.modelCart.clear();
 					
+					panelBuyerDashboard.listCart.setCellRenderer(new Renderer());
 					
+					String cart = "";
+					conn.createStatement().executeUpdate("Update customer_data SET Cart = '"+cart+"' Where Customer_id = '" + currentCustomerId + "'");		
+						
+
 					conn.close();
+					
+					JOptionPane.showMessageDialog(null, "All the corresponding sellers have been notified with your request to buy.");
+					
 				} catch (SQLException e1) {
 					e1.printStackTrace();				
 				}

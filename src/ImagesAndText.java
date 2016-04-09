@@ -7,6 +7,7 @@ public class ImagesAndText {
 	public boolean isInserted;
 	public float price;
 	
+	
 	public String getItemId() {
 		return itemId;
 	}
