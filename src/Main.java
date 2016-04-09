@@ -557,7 +557,7 @@ public class Main extends JFrame {
 					String buyerId = rs.getString("BuyerId");
 
 				 
-		    		JOptionPane.showMessageDialog(null, "The Item with item Id " + currentItemId + " has been delivered to the customer with Customer_Id " + buyerId);
+		    		JOptionPane.showMessageDialog(null, "The Item with item Id " + currentItemId + " has been delivered to the customer with Customer_Id + " + buyerId);
  
 
 					rs = conn.createStatement().executeQuery("SELECT * from customer_data where Customer_id = '"+ buyerId +"'");					
@@ -1521,7 +1521,41 @@ public class Main extends JFrame {
 						rs = conn.createStatement().executeQuery("SELECT * from customer_data where Customer_id = '"+ customerId +"'");
 						
 						buyReq = rs.getString("Buy_req");
-						buyReq += " " + itemId + " " + is.price + " " + " "  + customerId;
+						
+						boolean exists = false;
+						
+
+						String[] imageIds = null;
+						if(buyReq!="")
+							imageIds = buyReq.split("\\s+");
+						
+						int len = 0;
+						if(imageIds != null)
+							len = imageIds.length;
+						
+						for(int j=0; i<len; i++)
+						{
+							if(imageIds[i].compareTo(itemId)==0)
+							{
+								if(imageIds[i+2].compareTo(customerId)==0)
+								{
+									imageIds[i+1] = Float.toString(is.price);
+									exists = true;
+								}
+							}
+						}
+						
+						if(!exists)
+							buyReq += " " + itemId + " " + is.price + " " + " "  + customerId;	
+						else
+						{
+							buyReq = "";
+							for(i=0; i<len; i++)
+							{
+								buyReq += " " + imageIds[i];
+							}
+						}
+						
 						
 						conn.createStatement().executeUpdate("Update customer_data SET Buy_req = '"+buyReq+"' Where Customer_id = '" + customerId + "'");
 						conn.createStatement().executeUpdate("Update item_data SET BuyerId = '"+currentCustomerId+"' Where Item_Id = '" + itemId + "'");	
