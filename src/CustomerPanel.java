@@ -15,6 +15,12 @@ public class CustomerPanel extends JPanel {
 	public JButton btnCreateMyAccount;
 	
 	public Customer customer = new Customer();
+	public JButton btnUpdateSeller;
+	public JButton btnUpdateBuyer;
+	public JLabel lblUsername;
+	public JTextField textUsername;
+	public JTextField textPassword;
+	public JLabel lblPassword;
 	
 	/**
 	 * Create the panel.
@@ -23,7 +29,7 @@ public class CustomerPanel extends JPanel {
 		setLayout(null);
 		
 		JLabel lblName = new JLabel("Name");
-		lblName.setBounds(103, 32, 46, 14);
+		lblName.setBounds(103, 31, 46, 14);
 		add(lblName);
 		
 		JLabel lblTelephone = new JLabel("Telephone");
@@ -74,13 +80,40 @@ public class CustomerPanel extends JPanel {
 			}
 		});
 		
-		btnCreateMyAccount.setBounds(60, 234, 162, 23);
+		btnCreateMyAccount.setBounds(57, 234, 162, 23);
 		add(btnCreateMyAccount);
 		
 		btnIllCreateIt = new JButton("I will create it later");
 		
 		btnIllCreateIt.setBounds(252, 234, 123, 23);
 		add(btnIllCreateIt);		
+		
+		btnUpdateSeller = new JButton("Update ");
+		
+		btnUpdateSeller.setBounds(102, 263, 117, 25);
+		add(btnUpdateSeller);
+		
+		btnUpdateBuyer = new JButton("Update ");
+		btnUpdateBuyer.setBounds(252, 263, 117, 25);
+		add(btnUpdateBuyer);
+		
+		lblUsername = new JLabel("Username");
+		lblUsername.setBounds(345, 31, 93, 15);
+		add(lblUsername);
+		
+		textUsername = new JTextField();
+		textUsername.setBounds(324, 47, 114, 19);
+		add(textUsername);
+		textUsername.setColumns(10);
+		
+		lblPassword = new JLabel("Password");
+		lblPassword.setBounds(345, 79, 93, 15);
+		add(lblPassword);
+		
+		textPassword = new JTextField();
+		textPassword.setBounds(324, 102, 114, 19);
+		add(textPassword);
+		textPassword.setColumns(10);
 		
 		
 	}

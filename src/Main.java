@@ -22,6 +22,7 @@ import java.util.Vector;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -73,7 +74,7 @@ public class Main extends JFrame {
 	public Main() {
 		setTitle("Online Sale Portal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 525, 332);
+		setBounds(100, 100, 624, 403);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -119,6 +120,17 @@ public class Main extends JFrame {
 		panelRegister.btnCustomer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panelRegister.setVisible(false);
+				
+				panelCustomer.btnCreateMyAccount.setVisible(true);
+				panelCustomer.btnIllCreateIt.setVisible(true);
+				panelCustomer.btnUpdateBuyer.setVisible(false);
+				panelCustomer.btnUpdateSeller.setVisible(false);
+				
+				panelCustomer.lblUsername.setVisible(false);
+				panelCustomer.textUsername.setVisible(false);
+				panelCustomer.textPassword.setVisible(false);
+				panelCustomer.lblPassword.setVisible(false);
+				
 				panelCustomer.setVisible(true);
 			}
 		});		
@@ -140,6 +152,9 @@ public class Main extends JFrame {
 		panelCustomer.btnCreateMyAccount.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {	
 				panelCustomer.setVisible(false);
+				
+				
+				
 				panelCustomer.customer.setCity(panelCustomer.textCity.getText());
 				panelCustomer.customer.setEmail(panelCustomer.textEmail.getText());
 				panelCustomer.customer.setIM_ID(panelCustomer.textIM_ID.getText());
@@ -587,6 +602,7 @@ public class Main extends JFrame {
 					}
 					
 					conn.createStatement().executeUpdate("UPDATE customer_data SET Buy_req = '" + buyReq + "' "+ "Where Customer_id = '"+buyerId+"'");
+					conn.createStatement().executeQuery("Delete from item_data where Item_Id = '" + currentItemId + "'");
 					conn.close();
 					
 					panelSellerDashboard.modelBuy.removeElementAt(index);
@@ -1580,6 +1596,240 @@ public class Main extends JFrame {
 			   
 			}
 		});
+		
+
+		panelSellerDashboard.btnUpdateProfile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelSellerDashboard.setVisible(false);
+				
+				panelCustomer.btnCreateMyAccount.setVisible(false);
+				panelCustomer.btnIllCreateIt.setVisible(false);
+				panelCustomer.btnUpdateBuyer.setVisible(false);
+				panelCustomer.btnUpdateSeller.setVisible(true);	
+				
+
+				panelCustomer.lblUsername.setVisible(true);
+				panelCustomer.textUsername.setVisible(true);
+				panelCustomer.textPassword.setVisible(true);
+				panelCustomer.lblPassword.setVisible(true);
+				
+				try{
+					Connection conn = sqliteConnection.dbConnector();
+					
+					ResultSet rs = null;
+					
+					rs = conn.createStatement().executeQuery("Select * from customer_data Where Customer_id = '"+currentCustomerId+ "'");
+					
+
+					panelCustomer.textName.setText(rs.getString("Name"));
+					panelCustomer.textCity.setText(rs.getString("City"));
+					panelCustomer.textEmail.setText(rs.getString("Email"));
+					panelCustomer.textTelephone.setText(rs.getString("Telephone"));
+					panelCustomer.textIM_ID.setText(rs.getString("IM_ID"));
+					panelCustomer.textUsername.setText(rs.getString("Username"));
+					panelCustomer.textPassword.setText(rs.getString("Password"));
+					
+					conn.close();
+					
+				}
+				catch(SQLException e1)
+				{
+					e1.printStackTrace();
+				}
+				
+				
+				
+				panelCustomer.setVisible(true);
+			}
+		});
+		
+		panelBuyerDashboard.btnUpdateProfile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelBuyerDashboard.setVisible(false);
+				
+				panelCustomer.btnCreateMyAccount.setVisible(false);
+				panelCustomer.btnIllCreateIt.setVisible(false);
+				panelCustomer.btnUpdateBuyer.setVisible(true);
+				panelCustomer.btnUpdateSeller.setVisible(false);	
+				
+
+				panelCustomer.lblUsername.setVisible(true);
+				panelCustomer.textUsername.setVisible(true);
+				panelCustomer.textPassword.setVisible(true);
+				panelCustomer.lblPassword.setVisible(true);
+				
+				try{
+					Connection conn = sqliteConnection.dbConnector();
+					
+					ResultSet rs = null;
+					
+					rs = conn.createStatement().executeQuery("Select * from customer_data Where Customer_id = '"+currentCustomerId+ "'");
+					
+
+					panelCustomer.textName.setText(rs.getString("Name"));
+					panelCustomer.textCity.setText(rs.getString("City"));
+					panelCustomer.textEmail.setText(rs.getString("Email"));
+					panelCustomer.textTelephone.setText(rs.getString("Telephone"));
+					panelCustomer.textIM_ID.setText(rs.getString("IM_ID"));
+					panelCustomer.textUsername.setText(rs.getString("Username"));
+					panelCustomer.textPassword.setText(rs.getString("Password"));
+					
+					conn.close();
+					
+				}
+				catch(SQLException e1)
+				{
+					e1.printStackTrace();
+				}
+				
+				
+				
+				panelCustomer.setVisible(true);
+			}
+		});
+		
+		panelManagerDashboard.btnUpdateProfile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelSellerDashboard.setVisible(false);			
+					
+
+				panelManager.lblUsername.setVisible(true);
+				panelManager.textUsername.setVisible(true);
+				panelManager.textPassword.setVisible(true);
+				panelManager.lblPassword.setVisible(true);
+				
+				try{
+					Connection conn = sqliteConnection.dbConnector();
+					
+					ResultSet rs = null;
+					
+					rs = conn.createStatement().executeQuery("Select * from manager_data Where Customer_id = '"+currentManagerId+ "'");
+					
+
+					panelManager.textName.setText(rs.getString("Name"));
+					panelManager.textGender.setText(rs.getString("Gender"));
+					panelManager.textEmail.setText(rs.getString("Email"));
+					panelManager.textTelephone.setText(rs.getString("Telephone"));
+					panelManager.textIM_ID.setText(rs.getString("IM_ID"));
+					panelManager.textDOB.setText(rs.getString("Date_of_birth"));
+					panelManager.textAddress.setText(rs.getString("Address"));
+					panelManager.textBiometricID.setText(rs.getString("Biometric_ID"));
+					panelManager.textUsername.setText(rs.getString("Username"));
+					panelManager.textPassword.setText(rs.getString("Password"));
+					
+					conn.close();
+					
+				}
+				catch(SQLException e1)
+				{
+					e1.printStackTrace();
+				}
+				
+				
+				
+				panelManager.setVisible(true);
+			}
+		});
+		
+		panelCustomer.btnUpdateSeller.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelCustomer.setVisible(false);
+				
+				panelCustomer.customer.setCity(panelCustomer.textCity.getText());
+				panelCustomer.customer.setEmail(panelCustomer.textEmail.getText());
+				panelCustomer.customer.setIM_ID(panelCustomer.textIM_ID.getText());
+				panelCustomer.customer.setName(panelCustomer.textName.getText());
+				panelCustomer.customer.setTelephone(panelCustomer.textTelephone.getText());
+				
+				
+				
+				Connection conn = sqliteConnection.dbConnector();
+				
+
+				
+				String username = panelCustomer.textUsername.getText();
+				
+				String password = panelCustomer.textPassword.getText();
+				
+				try {
+					conn.createStatement().executeUpdate("Update customer_data SET Name = '"+panelCustomer.customer.getName() + "', "
+														  + "Username = '" + username + "', "
+														  + "Password = '" + password + "', "
+														  + " Telephone = '" + panelCustomer.customer.getTelephone() + "', "
+														  + "IM_ID = '" + panelCustomer.customer.getIM_ID()+ "', "
+														  + "City = '" + panelCustomer.customer.getCity() + "', "
+														  + "Email = '" + panelCustomer.customer.getEmail() + "' "
+														  + "Where Customer_id = '" + currentCustomerId + "' "
+														  );
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
+				
+				panelCustomer.textName.setText("");
+				panelCustomer.textCity.setText("");
+				panelCustomer.textEmail.setText("");
+				panelCustomer.textTelephone.setText("");
+				panelCustomer.textIM_ID.setText("");
+				panelCustomer.textUsername.setText("");
+				panelCustomer.textPassword.setText("");
+				
+				panelSellerDashboard.setVisible(true);
+			}
+		});
+		
+		panelCustomer.btnUpdateBuyer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelCustomer.setVisible(false);
+				
+				panelCustomer.customer.setCity(panelCustomer.textCity.getText());
+				panelCustomer.customer.setEmail(panelCustomer.textEmail.getText());
+				panelCustomer.customer.setIM_ID(panelCustomer.textIM_ID.getText());
+				panelCustomer.customer.setName(panelCustomer.textName.getText());
+				panelCustomer.customer.setTelephone(panelCustomer.textTelephone.getText());
+				
+				
+				
+				Connection conn = sqliteConnection.dbConnector();
+				
+
+				
+				String username = panelCustomer.textUsername.getText();
+				
+				String password = panelCustomer.textPassword.getText();
+				
+				try {
+					conn.createStatement().executeUpdate("Update customer_data SET Name = '"+panelCustomer.customer.getName() + "', "
+														  + "Username = '" + username + "', "
+														  + "Password = '" + password + "', "
+														  + " Telephone = '" + panelCustomer.customer.getTelephone() + "', "
+														  + "IM_ID = '" + panelCustomer.customer.getIM_ID()+ "', "
+														  + "City = '" + panelCustomer.customer.getCity() + "', "
+														  + "Email = '" + panelCustomer.customer.getEmail() + "' "
+														  + "Where Customer_id = '" + currentCustomerId + "' "
+														  );
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
+				
+				panelCustomer.textName.setText("");
+				panelCustomer.textCity.setText("");
+				panelCustomer.textEmail.setText("");
+				panelCustomer.textTelephone.setText("");
+				panelCustomer.textIM_ID.setText("");
+				panelCustomer.textUsername.setText("");
+				panelCustomer.textPassword.setText("");
+				
+				panelBuyerDashboard.setVisible(true);
+			}
+		});
+		
+		
 		
 		
 		

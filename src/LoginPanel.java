@@ -26,20 +26,24 @@ public class LoginPanel extends JPanel {
 		add(btnNewButton);
 		
 		btnRegister = new JButton("Register ");
+		btnRegister.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
 		
-		btnRegister.setBounds(183, 78, 89, 23);
+		btnRegister.setBounds(201, 175, 112, 23);
 		add(btnRegister);
 		
 		btnCustomer = new JButton("Customer");
-		btnCustomer.setBounds(119, 214, 112, 23);
+		btnCustomer.setBounds(116, 284, 112, 23);
 		add(btnCustomer);
 		
 		btnManager = new JButton("Manager");
-		btnManager.setBounds(241, 214, 105, 23);
+		btnManager.setBounds(298, 284, 105, 23);
 		add(btnManager);
 		
 		JLabel lblLoginAs = new JLabel("Login as");
-		lblLoginAs.setBounds(200, 189, 89, 14);
+		lblLoginAs.setBounds(224, 255, 89, 28);
 		add(lblLoginAs);
 	}
 }

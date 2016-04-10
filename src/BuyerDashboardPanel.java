@@ -14,7 +14,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class BuyerDashboardPanel extends JPanel {
-	public JTextField textSearch;
 	public JButton btnDisplayCategories;
 	public JList<String> listCategories;
 	
@@ -35,6 +34,7 @@ public class BuyerDashboardPanel extends JPanel {
 	public JList<Object> listMessages;
 	public JLabel lblMessages;
 	public JButton btnPlaceOrder;
+	public JButton btnUpdateProfile;
 
 	/**
 	 * Create the panel.
@@ -50,15 +50,6 @@ public class BuyerDashboardPanel extends JPanel {
 		
 		btnDisplayCategories.setBounds(10, 274, 142, 23);
 		add(btnDisplayCategories);
-		
-		textSearch = new JTextField();
-		textSearch.setBounds(101, 30, 209, 20);
-		add(textSearch);
-		textSearch.setColumns(10);
-		
-		JButton btnSearch = new JButton("Search");
-		btnSearch.setBounds(320, 29, 89, 23);
-		add(btnSearch);		
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 101, 142, 151);
@@ -105,6 +96,10 @@ public class BuyerDashboardPanel extends JPanel {
 		btnPlaceOrder = new JButton("Place Order");
 		btnPlaceOrder.setBounds(211, 310, 147, 23);
 		add(btnPlaceOrder);
+		
+		btnUpdateProfile = new JButton("Update Profile");
+		btnUpdateProfile.setBounds(57, 10, 165, 25);
+		add(btnUpdateProfile);
 		
 		
 		

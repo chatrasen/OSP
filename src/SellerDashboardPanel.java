@@ -20,6 +20,7 @@ public class SellerDashboardPanel extends JPanel {
 	public DefaultListModel<Object> modelNego = new DefaultListModel<Object>();
 	public DefaultListModel<Object> modelBuy = new DefaultListModel<Object>();
 
+	public JButton btnUpdateProfile;
 	/**
 	 * Create the panel.
 	 */
@@ -72,6 +73,10 @@ public class SellerDashboardPanel extends JPanel {
 		JLabel lblBuyingRequests = new JLabel("Buying Requests");
 		lblBuyingRequests.setBounds(206, 140, 114, 14);
 		add(lblBuyingRequests);
+		
+		btnUpdateProfile = new JButton("Update Profile");
+		btnUpdateProfile.setBounds(12, 10, 170, 25);
+		add(btnUpdateProfile);
 		
 	}
 

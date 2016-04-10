@@ -19,6 +19,10 @@ public class ManagerPanel extends JPanel {
 	public JButton btnIWillTry;
 	
 	public Manager manager = new Manager();
+	public JLabel lblUsername;
+	public JTextField textUsername;
+	public JLabel lblPassword;
+	public JTextField textPassword;
 
 	/**
 	 * Create the panel.
@@ -112,6 +116,24 @@ public class ManagerPanel extends JPanel {
 		
 		btnIWillTry.setBounds(237, 248, 157, 23);
 		add(btnIWillTry);
+		
+		lblUsername = new JLabel("Username");
+		lblUsername.setBounds(364, 44, 95, 15);
+		add(lblUsername);
+		
+		textUsername = new JTextField();
+		textUsername.setBounds(345, 69, 114, 19);
+		add(textUsername);
+		textUsername.setColumns(10);
+		
+		lblPassword = new JLabel("Password");
+		lblPassword.setBounds(364, 114, 95, 15);
+		add(lblPassword);
+		
+		textPassword = new JTextField();
+		textPassword.setBounds(345, 146, 114, 19);
+		add(textPassword);
+		textPassword.setColumns(10);
 	}
 
 }
