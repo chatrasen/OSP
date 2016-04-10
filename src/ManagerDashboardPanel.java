@@ -11,10 +11,10 @@ public class ManagerDashboardPanel extends JPanel {
 	public JButton btnUpdateProfile;
 	public JButton btnLogout;
 	
-	public JList<Object> listCustomers;
+	public JList<String> listCustomers;
 	public JList<Object> listItems;
 	
-	public DefaultListModel<Object> modelCustomers = new DefaultListModel<Object>();
+	public DefaultListModel<String> modelCustomers = new DefaultListModel<String>();
 	public DefaultListModel<Object> modelItems = new DefaultListModel<Object>();
 	/**
 	 * Create the panel.
@@ -34,7 +34,7 @@ public class ManagerDashboardPanel extends JPanel {
 		scrollPane.setBounds(28, 114, 159, 151);
 		add(scrollPane);
 		
-		listCustomers = new JList<Object>(modelCustomers);
+		listCustomers = new JList<String>(modelCustomers);
 		scrollPane.setViewportView(listCustomers);
 		
 		JLabel lblCustomers = new JLabel("Customers");

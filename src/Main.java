@@ -382,7 +382,35 @@ public class Main extends JFrame {
 					{
 						//JOptionPane.showMessageDialog(null, "Username and password is correct");
 						panelManagerLogin.setVisible(false);
+						
+						rs  = conn.createStatement().executeQuery("Select * from customer_data");
+						
+						panelManagerDashboard.modelCustomers.clear();
+						
+						while(rs.next())
+						{
+							panelManagerDashboard.modelCustomers.addElement(rs.getString("Customer_id"));							
+						}
+						
+						rs = conn.createStatement().executeQuery("Select * from item_data");
+						panelManagerDashboard.modelItems.clear();
+						while(rs.next())
+						{
+							boolean inserted = false;
+							ImageIcon imageIcon = new ImageIcon(rs.getString("Image_File"));				
+							Image image = imageIcon.getImage(); 
+							Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH);  
+							imageIcon = new ImageIcon(newimg);  
+							inserted = true;
+							panelManagerDashboard.modelItems.addElement(new ImagesAndText("UploaderId: " + rs.getString("UploaderId") + ", BuyerId: " + rs.getString("BuyerId") , imageIcon, rs.getString("Item_Id"), inserted, Float.parseFloat(rs.getString("Price"))));
+						}
+						
+						panelManagerDashboard.listItems.setCellRenderer(new Renderer());
+
 						panelManagerDashboard.setVisible(true);
+
+						
+						
 					}
 					else if(count > 1)
 					{
@@ -394,6 +422,7 @@ public class Main extends JFrame {
 					}
 					pst.close();
 					rs.close();
+					conn.close();
 				} catch (SQLException e1) {					
 					e1.printStackTrace();
 				}
@@ -1606,6 +1635,8 @@ public class Main extends JFrame {
 			   
 			}
 		});
+		
+		
 		
 
 		panelSellerDashboard.btnUpdateProfile.addActionListener(new ActionListener() {
