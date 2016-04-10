@@ -644,7 +644,7 @@ public class Main extends JFrame {
 					}
 					
 					conn.createStatement().executeUpdate("UPDATE customer_data SET Buy_req = '" + buyReq + "' "+ "Where Customer_id = '"+buyerId+"'");
-					conn.createStatement().executeQuery("Delete from item_data where Item_Id = '" + currentItemId + "'");
+					conn.createStatement().executeUpdate("Delete from item_data where Item_Id = '" + currentItemId + "'");
 					conn.close();
 					
 					panelSellerDashboard.modelBuy.removeElementAt(index);
@@ -1973,7 +1973,7 @@ public class Main extends JFrame {
 					rs = conn.createStatement().executeQuery("Select * from customer_data where Customer_id = '" + currentCustomerId + "'");
 					if(rs.getString("Cart").compareTo("")==0 && rs.getString("Buyer_msg").compareTo("")==0 && rs.getString("Seller_msg").compareTo("")==0 && rs.getString("Uploaded_Items").compareTo("")==0)
 					{
-						conn.createStatement().executeQuery("Delete * from customer_data where Customer_id = '"+currentCustomerId + "'");
+						conn.createStatement().executeUpdate("Delete * from customer_data where Customer_id = '"+currentCustomerId + "'");
 						JOptionPane.showMessageDialog(null, "This customer has been successfully removed from the portal and an email has been sent to inform him about that");
 
 					}
