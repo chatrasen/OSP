@@ -214,6 +214,16 @@ public class Main extends JFrame {
 		panelRegister.btnManager.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panelRegister.setVisible(false);
+				
+				panelManager.btnCreateNewAccount.setVisible(true);
+				panelManager.btnIWillTry.setVisible(true);
+				panelManager.btnUpdate.setVisible(false);
+				
+				panelManager.lblUsername.setVisible(false);
+				panelManager.textUsername.setVisible(false);
+				panelManager.textPassword.setVisible(false);
+				panelManager.lblPassword.setVisible(false);
+				
 				panelManager.setVisible(true);
 			}
 		});		
@@ -1690,7 +1700,7 @@ public class Main extends JFrame {
 		
 		panelManagerDashboard.btnUpdateProfile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				panelSellerDashboard.setVisible(false);			
+				panelManagerDashboard.setVisible(false);			
 					
 
 				panelManager.lblUsername.setVisible(true);
@@ -1698,12 +1708,16 @@ public class Main extends JFrame {
 				panelManager.textPassword.setVisible(true);
 				panelManager.lblPassword.setVisible(true);
 				
+				panelManager.btnCreateNewAccount.setVisible(false);
+				panelManager.btnIWillTry.setVisible(false);
+				panelManager.btnUpdate.setVisible(true);
+				
 				try{
 					Connection conn = sqliteConnection.dbConnector();
 					
 					ResultSet rs = null;
 					
-					rs = conn.createStatement().executeQuery("Select * from manager_data Where Customer_id = '"+currentManagerId+ "'");
+					rs = conn.createStatement().executeQuery("Select * from manager_data Where ManagerId = '"+currentManagerId+ "'");
 					
 
 					panelManager.textName.setText(rs.getString("Name"));
@@ -1830,6 +1844,64 @@ public class Main extends JFrame {
 		});
 		
 		
+		panelManager.btnUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelManager.setVisible(false);
+				
+				panelManager.manager.setAddress(panelManager.textAddress.getText());
+				panelManager.manager.setEmail(panelManager.textEmail.getText());
+				panelManager.manager.setIM_ID(panelManager.textIM_ID.getText());
+				panelManager.manager.setName(panelManager.textName.getText());
+				panelManager.manager.setDateOfBirth(panelManager.textDOB.getText());			
+				panelManager.manager.setTelephone(panelManager.textTelephone.getText());			
+				panelManager.manager.setGender(panelManager.textGender.getText());			
+				panelManager.manager.setBiometricID(panelManager.textBiometricID.getText());			
+
+				
+				
+				Connection conn = sqliteConnection.dbConnector();
+				
+
+				
+				String username = panelManager.textUsername.getText();
+				
+				String password = panelManager.textPassword.getText();
+				
+				try {
+					conn.createStatement().executeUpdate("Update manager_data SET Name = '"+panelManager.manager.getName() + "', "
+														  + "Username = '" + username + "', "
+														  + "Password = '" + password + "', "
+														  + "Telephone = '" + panelManager.manager.getTelephone() + "', "
+														  + "IM_ID = '" + panelManager.manager.getIM_ID()+ "', "
+														  + "Gender = '" + panelManager.manager.getGender() + "', "
+														  + "Email = '" + panelManager.manager.getEmail() + "', "
+														  + "Date_of_birth = '" + panelManager.manager.getDateOfBirth() + "', "
+														  + "Address = '" + panelManager.manager.getAddress() + "', "
+														  + "Biometric_ID = '" + panelManager.manager.getBiometricID() + "' "
+														  + "Where ManagerId = '" + currentManagerId + "' "
+														  );
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				
+				
+				
+				panelManager.textName.setText("");
+				panelManager.textGender.setText("");
+				panelManager.textEmail.setText("");
+				panelManager.textTelephone.setText("");
+				panelManager.textIM_ID.setText("");
+				panelManager.textDOB.setText("");
+				panelManager.textAddress.setText("");
+				panelManager.textBiometricID.setText("");
+				panelManager.textUsername.setText("");
+				panelManager.textPassword.setText("");
+				
+				
+				panelManagerDashboard.setVisible(true);
+			}
+		});
+		
 		
 		
 		
@@ -1858,6 +1930,16 @@ public class Main extends JFrame {
 			}
 		});
 		
+		panelManagerDashboard.btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelManagerDashboard.setVisible(false);
+				
+				panelManagerDashboard.modelCustomers.clear();
+				panelManagerDashboard.modelItems.clear();
+
+				panelLogin.setVisible(true);
+			}
+		});
 		
 	}
 }

@@ -23,6 +23,7 @@ public class ManagerPanel extends JPanel {
 	public JTextField textUsername;
 	public JLabel lblPassword;
 	public JTextField textPassword;
+	public JButton btnUpdate;
 
 	/**
 	 * Create the panel.
@@ -134,6 +135,10 @@ public class ManagerPanel extends JPanel {
 		textPassword.setBounds(345, 146, 114, 19);
 		add(textPassword);
 		textPassword.setColumns(10);
+		
+		btnUpdate = new JButton("Update");
+		btnUpdate.setBounds(158, 283, 117, 25);
+		add(btnUpdate);
 	}
 
 }
