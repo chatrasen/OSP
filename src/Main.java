@@ -125,6 +125,8 @@ public class Main extends JFrame {
 				panelCustomer.btnIllCreateIt.setVisible(true);
 				panelCustomer.btnUpdateBuyer.setVisible(false);
 				panelCustomer.btnUpdateSeller.setVisible(false);
+				panelCustomer.btnOk.setVisible(false);	
+				panelCustomer.btnRemoveCustomer.setVisible(false);	
 				
 				panelCustomer.lblUsername.setVisible(false);
 				panelCustomer.textUsername.setVisible(false);
@@ -429,7 +431,8 @@ public class Main extends JFrame {
 				panelManagerLogin.userNameField.setText("");
 				panelManagerLogin.passwordField.setText("");
 			}
-		});
+		});	
+		
 		
 		panelCustomerDashboard.btnSeller.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1636,6 +1639,68 @@ public class Main extends JFrame {
 			}
 		});
 		
+	
+		panelManagerDashboard.listCustomers.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+
+				if(e.getClickCount()==2)
+				{
+					panelManagerDashboard.setVisible(false);
+					conn = sqliteConnection.dbConnector();
+					
+					
+					try {
+						conn = sqliteConnection.dbConnector();
+					    Statement stmt = null;
+					    
+					    int index = panelManagerDashboard.listCustomers.locationToIndex(e.getPoint());
+					    currentCustomerId = panelManagerDashboard.modelCustomers.getElementAt(index);
+					    
+					    
+						stmt = (Statement) conn.createStatement();
+						ResultSet rs = stmt.executeQuery( "SELECT * FROM customer_data where Customer_id = '"+currentCustomerId + "'");						
+						
+						
+						panelCustomer.lblUsername.setVisible(false);
+						panelCustomer.textUsername.setVisible(false);
+						panelCustomer.textPassword.setVisible(false);
+						panelCustomer.lblPassword.setVisible(false);
+						
+						panelCustomer.btnCreateMyAccount.setVisible(false);
+						panelCustomer.btnIllCreateIt.setVisible(false);
+						panelCustomer.btnUpdateBuyer.setVisible(false);
+						panelCustomer.btnUpdateSeller.setVisible(false);	
+						panelCustomer.btnOk.setVisible(true);	
+						panelCustomer.btnRemoveCustomer.setVisible(true);	
+
+						
+						
+						panelCustomer.textName.setText(rs.getString("Name"));
+						panelCustomer.textCity.setText(rs.getString("City"));
+						panelCustomer.textEmail.setText(rs.getString("Email"));
+						panelCustomer.textTelephone.setText(rs.getString("Telephone"));
+						panelCustomer.textIM_ID.setText(rs.getString("IM_ID"));
+						
+						panelCustomer.textName.setEditable(false);
+						panelCustomer.textCity.setEditable(false);
+						panelCustomer.textEmail.setEditable(false);
+						panelCustomer.textTelephone.setEditable(false);
+						panelCustomer.textIM_ID.setEditable(false);
+						
+						panelCustomer.setVisible(true);
+						conn.close();
+					} catch (SQLException e1) {					
+						e1.printStackTrace();
+					}
+					
+					panelImageSpecs.setVisible(true);
+				}
+			}
+		});
+		
+		
 		
 		
 
@@ -1647,7 +1712,8 @@ public class Main extends JFrame {
 				panelCustomer.btnIllCreateIt.setVisible(false);
 				panelCustomer.btnUpdateBuyer.setVisible(false);
 				panelCustomer.btnUpdateSeller.setVisible(true);	
-				
+				panelCustomer.btnOk.setVisible(false);	
+				panelCustomer.btnRemoveCustomer.setVisible(false);	
 
 				panelCustomer.lblUsername.setVisible(true);
 				panelCustomer.textUsername.setVisible(true);
@@ -1692,6 +1758,8 @@ public class Main extends JFrame {
 				panelCustomer.btnIllCreateIt.setVisible(false);
 				panelCustomer.btnUpdateBuyer.setVisible(true);
 				panelCustomer.btnUpdateSeller.setVisible(false);	
+				panelCustomer.btnOk.setVisible(false);	
+				panelCustomer.btnRemoveCustomer.setVisible(false);	
 				
 
 				panelCustomer.lblUsername.setVisible(true);
@@ -1871,6 +1939,54 @@ public class Main extends JFrame {
 				panelCustomer.textPassword.setText("");
 				
 				panelBuyerDashboard.setVisible(true);
+			}
+		});
+		
+		panelCustomer.btnOk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelCustomer.setVisible(false);
+				
+				panelCustomer.textName.setText("");
+				panelCustomer.textCity.setText("");
+				panelCustomer.textEmail.setText("");
+				panelCustomer.textTelephone.setText("");
+				panelCustomer.textIM_ID.setText("");
+				
+				panelCustomer.textName.setEditable(true);
+				panelCustomer.textCity.setEditable(true);
+				panelCustomer.textEmail.setEditable(true);
+				panelCustomer.textTelephone.setEditable(true);
+				panelCustomer.textIM_ID.setEditable(true);
+				
+				panelManagerDashboard.setVisible(true);
+			}
+		});
+		
+		panelCustomer.btnRemoveCustomer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				panelCustomer.setVisible(false);
+				try{
+					conn = sqliteConnection.dbConnector();
+					ResultSet rs = null;
+					
+					rs = conn.createStatement().executeQuery("Select * from customer_data where Customer_id = '" + currentCustomerId + "'");
+					if(rs.getString("Cart").compareTo("")==0 && rs.getString("Buyer_msg").compareTo("")==0 && rs.getString("Seller_msg").compareTo("")==0 && rs.getString("Uploaded_Items").compareTo("")==0)
+					{
+						conn.createStatement().executeQuery("Delete * from customer_data where Customer_id = '"+currentCustomerId + "'");
+						JOptionPane.showMessageDialog(null, "This customer has been successfully removed from the portal and an email has been sent to inform him about that");
+
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "You cannot remove this customer as he/she is already involved in a transaction");
+					}
+				}
+				catch(SQLException e1)
+				{
+					e1.printStackTrace();
+				}
+				panelManagerDashboard.setVisible(true);
 			}
 		});
 		

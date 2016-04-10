@@ -21,6 +21,8 @@ public class CustomerPanel extends JPanel {
 	public JTextField textUsername;
 	public JTextField textPassword;
 	public JLabel lblPassword;
+	public JButton btnOk;
+	public JButton btnRemoveCustomer;
 	
 	/**
 	 * Create the panel.
@@ -114,6 +116,14 @@ public class CustomerPanel extends JPanel {
 		textPassword.setBounds(324, 102, 114, 19);
 		add(textPassword);
 		textPassword.setColumns(10);
+		
+		btnOk = new JButton("OK");
+		btnOk.setBounds(146, 192, 77, 25);
+		add(btnOk);
+		
+		btnRemoveCustomer = new JButton("Remove Customer");
+		btnRemoveCustomer.setBounds(252, 192, 117, 25);
+		add(btnRemoveCustomer);
 		
 		
 	}
